@@ -38,7 +38,9 @@ class user
                     $ret = $stmt->num_rows;
                 }
             }
+            $stmt->close();
         }
+        $mysqli->close();
         return $ret;
     }
 
