@@ -7,6 +7,7 @@
  */
 
 session_start();
+require_once ("class.user.php");
 $case = 0;
 if (!isset($_SESSION['username']) and !isset($_GET["page"])) {
     $case = 0;
@@ -38,27 +39,27 @@ if ($_GET["page"] == "log") {
 <body>
 <?php
 switch ($case) {
-case 0:
-?>
-Please log in: <br/>
-<form method="post" action="index.php?page=log">
-    User: <input type="text" name="user"> <br>
-    Password: <input type="password" name="password"><br>
-    <input type="submit" value="log in">
-</form>
-<p><a href="signup.php">No account? Sign up now!</a></p>
-<?php
-break;
-case 1:
-    ?>
-Login correct. You will be forwarded to the next site...
-<?php
-    break;
-case 2:
-    ?>
-Username or password incorrect. Take me <a href="index.php">back.</a>
-    <?php
-    break;
+    case 0:
+        ?>
+        Please log in: <br/>
+        <form method="post" action="index.php?page=log">
+            User: <input type="text" name="user"> <br>
+            Password: <input type="password" name="password"><br>
+            <input type="submit" value="log in">
+        </form>
+        <p><a href="signup.php">No account? Sign up now!</a></p>
+        <?php
+        break;
+    case 1:
+        ?>
+        Login correct. You will be forwarded to the next site...
+        <?php
+        break;
+    case 2:
+        ?>
+        Username or password incorrect. Take me <a href="index.php">back.</a>
+        <?php
+        break;
 }
 ?>
 

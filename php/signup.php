@@ -27,8 +27,8 @@ if (!isset($_GET["page"])) {
 if (isset($_GET["page"])) {
     if ($_GET["page"] == "2") {
         $user = strtolower($_POST["user"]);
-        $pw = md5($_POST["pw"]);
-        $pw2 = md5($_POST["pw2"]);
+        $pw = $_POST["pw"];
+        $pw2 = $_POST["pw2"];
 
         if ($pw != $pw2) {
             /*
@@ -42,6 +42,13 @@ if (isset($_GET["page"])) {
             $userauth = user::authUsername($user);
             if ($userauth != 0) {
                 echo "Username is already taken. Please choose a different username...<a href='signup.php'>take me back</a>";
+            } else {
+                $adduser = user::addUser($user, $pw);
+                if ($adduser > 0) {
+                    echo "Sign up competet.Your username is <strong>" . $user . "</strong> and your userid is <strong>" . $adduser . "</strong></br><a href='index.php'>Log in now</a>";
+                } else {
+                    echo "An error happend while creating your new profile. Please try again...<a href='signup.php'>take me back</a>";
+                }
             }
         }
     }
