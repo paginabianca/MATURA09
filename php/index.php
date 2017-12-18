@@ -7,29 +7,28 @@
  */
 
 session_start();
-require_once ("class.user.php");
-$case = 0;
+require_once("class.user.php");
+$case = 1;
 if (!isset($_SESSION['username']) and !isset($_GET["page"])) {
-    $case = 0;
+    $case = 1;
 }
 if ($_GET["page"] == "log") {
     $user = $_POST['class.user'];
     $password = $_POST['password'];
+    $auth = user::authUser($user, $password);
+
     //correct login
-    if ($user == "charlie" and $password == "plaplapla") {
+    if ($auth == 0) {
         $_SESSION['username'] = $user;
-        $case = 1;
-    } //incorrect login
-    else {
-        $case = 2;
     }
+    $case = $auth;
 }
 ?>
 <html>
 <head>
     <title>Login</title>
     <?php
-    if ($case == 1) {
+    if ($case == 20) {
         ?>
         <meta http-equiv="refresh" content="3; URL=secure.php"/>
         <?php
@@ -39,7 +38,7 @@ if ($_GET["page"] == "log") {
 <body>
 <?php
 switch ($case) {
-    case 0:
+    case 1:
         ?>
         Please log in: <br/>
         <form method="post" action="index.php?page=log">
@@ -48,16 +47,27 @@ switch ($case) {
             <input type="submit" value="log in">
         </form>
         <p><a href="signup.php">No account? Sign up now!</a></p>
+        <p><a href="reset.php">Forgot username or password?</a></p>
         <?php
         break;
-    case 1:
+    case 0:
         ?>
-        Login correct. You will be forwarded to the next site...
+        <strong>Succsess!</strong> Login correct. You will be forwarded to the next site...
         <?php
         break;
-    case 2:
+    case -1:
         ?>
-        Username or password incorrect. Take me <a href="index.php">back.</a>
+        <strong>Error!</strong> User does not exist! Take me <a href="index.php">back...</a>
+        <?php break;
+    case -2:
+        ?>
+        <strong>Error!</strong> User does not exist. <a href="signup.php">Sign up...</a>
+        <?php
+        break;
+    case -3:
+        ?>
+        <strong>Error!</strong> Database not found. Please make sure that your database is up and running. Take me <a
+            href="index.php"> back...</a>
         <?php
         break;
 }
