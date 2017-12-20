@@ -27,7 +27,6 @@ class user
                 echo "<strong>DB error:</strong> " . $mysqli->error . " <br><strong>nr.:</strong> " . $mysqli->errno;
             } else {
                 $stmt->bind_param('s', $newuser);
-                $user = $newuser;
                 $stmt->execute();
                 $stmt->store_result();
                 if ($stmt->num_rows > 0) {
