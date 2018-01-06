@@ -13,7 +13,7 @@ if (!isset($_SESSION['username']) and !isset($_GET["page"])) {
     $case = 1;
 }
 if ($_GET["page"] == "log") {
-    $user = $_POST['class.user'];
+    $user = $_POST['user'];
     $password = $_POST['password'];
     $auth = user::authUser($user, $password);
 
@@ -28,15 +28,18 @@ if ($_GET["page"] == "log") {
 <head>
     <title>Login</title>
     <?php
-    if ($case == 20) {
-        ?>
-        <meta http-equiv="refresh" content="3; URL=secure.php"/>
+    if ($case == 0) {
+         ?>
+       <!-- <meta http-equiv="refresh" content="3; URL=secure.php"/>-->
         <?php
+        header('Location: secure.php');
+        die;
     }
     ?>
 </head>
 <body>
 <?php
+echo "case: " . $case . "<br>";
 switch ($case) {
     case 1:
         ?>
@@ -57,7 +60,7 @@ switch ($case) {
         break;
     case -1:
         ?>
-        <strong>Error!</strong> User does not exist! Take me <a href="index.php">back...</a>
+        <strong>Error!</strong> Password not correct! <a href="index.php">Try again...</a>
         <?php break;
     case -2:
         ?>

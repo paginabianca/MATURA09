@@ -3,7 +3,6 @@ session_start();
 require_once("class.user.php");
 if(!user::checkLogin()){
     header('Location:index.php');
-
 }
 /**
  * Created by PhpStorm.
@@ -28,6 +27,7 @@ if(!user::checkLogin()){
             <hr>
         </div>
         <div class="right">
+        <strong>username:</strong> <?php echo $_SESSION[""]; ?>
 
         </div>
     </div>

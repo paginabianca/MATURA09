@@ -13,8 +13,9 @@ class user
      * @return int 0 if username is available, 1 if username is taken
      *
      * checks if username is already in table users@matura09_db
+     * was authUsername
      */
-    public static function authUsername($newuser)
+    public static function checkUsername($newuser)
     {
         $ret = 0;
         $mysqli = @new mysqli("localhost", "root", "masterkey", "matura09_db");
@@ -95,22 +96,25 @@ class user
             $sql = "SELECT uname FROM users WHERE uname = ?";
             $stmt = $mysqli->prepare($sql);
             if (!$stmt) {
-                echo "<strong>DB error:</strong> " . $mysqli->error . " <br><strong>nr.:</strong> " . $mysqli->errno;
+                echo "<strong>DB user error:</strong> " . $mysqli->error . " <br><strong>nr.:</strong> " . $mysqli->errno;
             } else {
-                $stmt->bind_param('s', $newuser);
-                $user = $newuser;
+                $stmt->bind_param('s', $uname);
                 $stmt->execute();
                 $stmt->store_result();
+               // $stmt->bind_result($dbuname);
+                //$stmt->fetch();
+                //echo $dbuname;
                 if ($stmt->num_rows > 0) {
                     $exists = $stmt->num_rows;
                 }
             }
+
             //user exists
             if ($exists) {
-                $sql = "SELECT pw FROM users WHERE uname = ?";
+                $sql = "SELECT upw FROM users WHERE uname = ?";
                 $stmt = $mysqli->prepare($sql);
                 if (!$stmt) {
-                    echo "<strong>DB error:</strong> " . $mysqli->error . " <br><strong>nr.:</strong> " . $mysqli->errno;
+                    echo "<strong>DB pw error:</strong> " . $mysqli->error . " <br><strong>nr.:</strong> " . $mysqli->errno;
                 } else {
                     $stmt->bind_param("s", $uname);
                     $stmt->execute();
@@ -127,8 +131,9 @@ class user
             } else {
                 $ret = -2;
             }
-            $stmt->close();
+
         }
+        $stmt->close();
         $mysqli->close();
         echo "</br>return: " . $ret . "</br>";
         return $ret;

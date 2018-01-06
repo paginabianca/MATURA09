@@ -38,9 +38,9 @@ if (isset($_GET["page"])) {
             echo "Passwords do not match! Take me <a href='signup.php'>back.</a>";
         } else {
             /*
-             * check if username is already in use through static method authUsername()
+             * check if username is already in use through static method checkUsername()
              * */
-            $userauth = user::authUsername($user);
+            $userauth = user::checkUsername($user);
             if ($userauth != 0) {
                 echo "Username is already taken. Please choose a different username...<a href='signup.php'>take me back</a>";
             } else {
