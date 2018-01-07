@@ -60,9 +60,55 @@ class dbaccess
                 //todo add a edit button to every dataset
                 //todo create a php file that enabables the user to edit a specific dataset (only one dataset at the time)
             }
-
+            $mysqli->commit();
         }
 
         return $ret;
     }
+
+    public function getContacts($sort)
+    {
+        $ret = null;
+        $mysqli = @new mysqli("localhost", "root", "masterkey", "matura09_db");
+        if (mysqli_connect_errno()) {
+            echo "<strong>DB connection error: </strong>" . mysqli_connect_error()
+                . " <br><strong>errornr: </strong>" . mysqli_connect_errno();
+        } else {
+            $mysqli->begin_transaction(MYSQLI_TRANS_START_READ_ONLY);
+            $mysqli->autocommit(false);
+            $sql = "SELECT c.id c.name, c.surname , c.tel, c.email, a.city, a.zip, a.street, a.nr, a.land
+            FROM contacts c , adr a 
+            ORDER  BY ? DESC";
+            $stmt = $mysqli->prepare($sql);
+            if (!$stmt) {
+                echo "<strong>DB error: </strong>" . $mysqli->error() . " <br><strong> errornr: </strong>" . $mysqli->errno();
+            } else {
+                $stmt->bind_param("s", $sort);
+                $stmt->execute();
+                $stmt->store_result();
+                $ret = $stmt->num_rows();
+                $stmt->bind_result($id ,$name,$surname,$tel,$email,$city,$zip,$street,$nr,$land);
+                //print out the contacts and edit links
+                while ($stmt->fetch()){
+                    echo "<tr><td>$name</td>
+                            <td>$surname</td>
+                            <td>$tel</td>
+                            <td>$email</td>
+                            <td>$city</td>
+                            <td>$zip</td>
+                            <td>$street</td>
+                            <td>$nr</td>
+                            <td>$land</td>
+                            <td><a href='edit.php?name=$name&surname=$surname&tel=$tel&email=$email&city=$city&zip=$zip&street=$street&nr=$nr&land=$land'></a>edit</td>
+                            <td><a href='delete.php?id=$id'>delete</td>";
+                }
+                $stmt->close();
+            }
+            $mysqli->commit();
+            $mysqli->close();
+
+        }
+        return ret;
+    }
+
 }

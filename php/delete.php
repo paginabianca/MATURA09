@@ -1,18 +1,17 @@
 <?php
-session_start();
-require_once("class.user.php");
-if (!user::checkLogin()) {
-    header('Location:index.php');
-}
+ session_start();
+ require_once ("class.user.php");
+ if(!user::checkLogin()){
+     header("Location:index.php");
+ }
 /**
  * Created by PhpStorm.
  * User: Andreas Botzner
- * Date: 08/12/2017
- * Time: 12:34
+ * Date: 07/01/2018
+ * Time: 12:16
  */
 
 ?>
-
 <html>
 <title>Secure</title>
 <style>
@@ -69,32 +68,10 @@ if (!user::checkLogin()) {
 </nav>
 <div class="col-2">
     <header>
-        <h3>Contacts</h3>
-        <form method="post" action="signup.php?page=search">
-            <input type="text" name="search" placeholder="Search...">
-        </form>
+        <h3>Edit</h3>
     </header>
     <main class="content">
-        <table border="1px" width="100%">
-            <thead>
-            <tr>
-                <th><a href="secure.php?sort=c.name">Name</a></th>
-                <th> <a href="secure.php?sort=c.surname">Surname</a></th>
-                <th> <a href="secure.php?sort=c.tel">Phone</a></th>
-                <th><a href="secure.php?sort=c.email">Email</a></th>
-                <th> <a href="secure.php?sort=a.city">City</a></th>
-                <th><a href="secure.php?sort=a.zip">ZIP</a></th>
-                <th><a href="secure.php?sort=a.street">Street</a></th>
-                <th><a href="secure.php?sort=a.nr">Nr.</a></th>
-                <th><a href="secure.php?sort=a.land">Land</a></th>
-                <th>Edit</th>
-                <th>Delete</th>
-            </tr>
-            </thead>
-
-        </table>
     </main>
 </div>
 </body>
 </html>
-

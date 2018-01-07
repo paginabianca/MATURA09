@@ -9,7 +9,7 @@
 session_start();
 require_once("class.user.php");
 $case = 1;
-if (!isset($_SESSION['username']) and !isset($_GET["page"])) {
+if (!user::checkLogin() and !isset($_GET["page"])) {
     $case = 1;
 }
 if ($_GET["page"] == "log") {
@@ -39,11 +39,10 @@ if ($_GET["page"] == "log") {
 </head>
 <body>
 <?php
-echo "case: " . $case . "<br>";
 switch ($case) {
     case 1:
         ?>
-        Please log in: <br/>
+        <h3>Please log in: </h3>
         <form method="post" action="index.php?page=log">
             User: <input type="text" name="user"> <br>
             Password: <input type="password" name="password"><br>

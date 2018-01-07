@@ -143,8 +143,7 @@ class user
 
     public static function checkLogin()
     {
-        session_start();
-        if (empty($_SESSION["user"])) {
+        if (empty($_SESSION["username"])) {
             return false;
         }
         return true;
