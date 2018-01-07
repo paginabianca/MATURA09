@@ -9,66 +9,11 @@
 class dbaccess
 {
     /**
-     * @return the number of contacts
+     * @return the index of the contact
      */
-    public function numberContacts()
+    public static function getContacts($sort)
     {
         $ret = 0;
-        $mysqli = @new mysqli("localhost", "root", "masterkey", "mature09_db");
-        if (mysqli_connect_errno()) {
-            "<strong>DB connection error: </strong>" . mysqli_connect_error() . " <br><strong>errornr: </strong>" . mysqli_connect_errno();
-        } else {
-            $mysqli->begin_transaction(MYSQLI_TRANS_START_READ_ONLY);
-            //setting isolation level to serializable to read from a snapshot of the db
-            $mysqli->query("SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ");
-            $result = $mysqli->query("SELECT SUM(id) FROM contacts", MYSQLI_STORE_RESULT);
-            $ret = $result->fetch_all(MYSQL_ASSOC);
-            var_dump($ret);
-        }
-        $mysqli->commit();
-        //todo fix return type to int not an array
-        return ret;
-    }
-
-    public function get15($number, $offset)
-    {
-        $ret = null;
-        $mysqli = @new mysqli("localhost", "root", "masterkey", "matura09_db");
-        if (mysqli_connect_errno()) {
-            echo "<strong>DB connection error: </strong>" . mysqli_connect_error() . " <br><strong>errornr: </strong>" . mysqli_connect_errno();
-        } else {
-            $mysqli->begin_transaction(MYSQLI_TRANS_START_READ_ONLY);
-            //setting isolation level to serializable to read from a snapshot of the db
-            $mysqli->query("SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ");
-            $sql = "SELECT c.vmane , c.name, c.tnr, c.email, o.city, o.zip, a.adr, a.hnr,a.land 
-                    FROM contacts c, ort o , addresses a
-                    ORDER BY 1, 2
-                    ROWS ? to ?
-                    ";
-            $stmt = $mysqli->prepare($sql);
-            if (!$stmt) {
-                echo "<strong>DB error:</strong> " . $mysqli->error . " <br><strong>nr.:</strong> " . $mysqli->errno;
-            } else {
-                $stmt->bind_param("ii", $offset, $number);
-                $stmt->execute();
-                $stmt->store_result();
-                $stmt->bind_result($vname, $name, $tnr, $email, $ort);//todo the rest of the attributes
-                $stmt->fetch();
-                //todo create database and check return type of this method
-                //todo Also check how oto create a button to add more results to the list.
-                //todo add a php file to the project that displays the datasets
-                //todo add a edit button to every dataset
-                //todo create a php file that enabables the user to edit a specific dataset (only one dataset at the time)
-            }
-            $mysqli->commit();
-        }
-
-        return $ret;
-    }
-
-    public function getContacts($sort)
-    {
-        $ret = null;
         $mysqli = @new mysqli("localhost", "root", "masterkey", "matura09_db");
         if (mysqli_connect_errno()) {
             echo "<strong>DB connection error: </strong>" . mysqli_connect_error()
@@ -76,20 +21,21 @@ class dbaccess
         } else {
             $mysqli->begin_transaction(MYSQLI_TRANS_START_READ_ONLY);
             $mysqli->autocommit(false);
-            $sql = "SELECT c.id c.name, c.surname , c.tel, c.email, a.city, a.zip, a.street, a.nr, a.land
+            $sql = "SELECT c.id ,c.name, c.surname , c.tel, c.email, a.city, a.zip, a.street, a.nr, a.land
             FROM contacts c , adr a 
-            ORDER  BY ? DESC";
+            WHERE c.adr = a.id
+            ORDER  BY ? ASC";
             $stmt = $mysqli->prepare($sql);
             if (!$stmt) {
-                echo "<strong>DB error: </strong>" . $mysqli->error() . " <br><strong> errornr: </strong>" . $mysqli->errno();
+                echo "<strong>DB error: </strong>" . $mysqli->error . " <br><strong> errornr: </strong>" . $mysqli->errno;
             } else {
-                $stmt->bind_param("s", $sort);
+                $stmt->bind_param("i", $sort);
                 $stmt->execute();
                 $stmt->store_result();
                 $ret = $stmt->num_rows();
-                $stmt->bind_result($id ,$name,$surname,$tel,$email,$city,$zip,$street,$nr,$land);
+                $stmt->bind_result($id, $name, $surname, $tel, $email, $city, $zip, $street, $nr, $land);
                 //print out the contacts and edit links
-                while ($stmt->fetch()){
+                while ($stmt->fetch()) {
                     echo "<tr><td>$name</td>
                             <td>$surname</td>
                             <td>$tel</td>
@@ -99,16 +45,150 @@ class dbaccess
                             <td>$street</td>
                             <td>$nr</td>
                             <td>$land</td>
-                            <td><a href='edit.php?name=$name&surname=$surname&tel=$tel&email=$email&city=$city&zip=$zip&street=$street&nr=$nr&land=$land'></a>edit</td>
+                            <td><a href='edit.php?id=$id'>edit</a></td>
                             <td><a href='delete.php?id=$id'>delete</td>";
                 }
                 $stmt->close();
             }
             $mysqli->commit();
-            $mysqli->close();
-
         }
+        $mysqli->close();
         return ret;
     }
 
+    /**
+     * @param $name
+     * @param $surname
+     * @param $tel
+     * @param $email
+     * @param $city
+     * @param $zip
+     * @param $street
+     * @param $nr
+     * @param $land
+     * @return int 0 if everything went well
+     *             -1 not able to add address
+     */
+    public static function addContact($name, $surname, $tel, $email, $city, $zip, $street, $nr, $land)
+    {
+        $ret = 2;
+        $mysqli = @new mysqli("localhost", "root", "masterkey", "matura09_db");
+        if (mysqli_connect_errno()) {
+            echo "<strong>DB connection error: </strong>" . mysqli_connect_error()
+                . " <br><strong>errornr: </strong>" . mysqli_connect_errno();
+        } else {
+            $mysqli->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+            $mysqli->autocommit(false);
+            //add the address
+            $sql = "INSERT INTO adr(city, zip, street,nr,land) VALUES (?,?,?,?,?)";
+            $stmt = $mysqli->prepare($sql);
+            if (!$stmt) {
+                echo "<strong>DB adr error: </strong>" . $mysqli->error . " <br><strong> errornr: </strong>" . $mysqli->errno;
+            } else {
+                $stmt->bind_param("sisis", $city, $zip, $street, $nr, $land);
+                $stmt->execute();
+                $id = $mysqli->insert_id;
+                $rows = $stmt->affected_rows;
+                // echo "Number of affected rows: ". $rows;
+            }
+            $stmt->close();
+            if ($rows > 0) {
+                //add the contact
+                $sql = "INSERT INTO contacts(name,surname,tel,email,adr) VALUES (?,?,?,?,?)";
+                $stmt = $mysqli->prepare($sql);
+                if (!$stmt) {
+                    echo "<strong>DB contact error: </strong>" . $mysqli->error . " <br><strong> errornr: </strong>" . $mysqli->errno;
+                } else {
+                    $stmt->bind_param("ssisi", $name, $surname, $tel, $email, $id);
+                    $stmt->execute();
+                    $ret = $mysqli->insert_id;
+                    $stmt->close();
+                }
+            }
+
+            $mysqli->commit();
+        }
+        $mysqli->close();
+        return $ret;
+    }
+
+    /**
+     * @param $id id of the contact to delete or all
+     * @return int 0 if deletet
+     *
+     */
+    public static function deleteThis($id)
+    {
+        $ret = 0;
+        $mysqli = @new mysqli("localhost", "root", "masterkey", "matura09_db");
+        if (mysqli_connect_errno()) {
+            echo "<strong>DB connection error: </strong>" . mysqli_connect_error() . " <br><strong>errornr: </strong>" . mysqli_connect_errno();
+        } else {
+            if ($id == "all") {
+                $sql = "DELETE * FROM contacts ";
+            } else {
+                $sql = "DELETE FROM contacts WHERE id=?";
+            }
+            $stmt = $mysqli->prepare($sql);
+            if (!$stmt) {
+                echo "<strong>DB error:</strong> " . $mysqli->error . " <br><strong>nr.:</strong> " . $mysqli->errno;
+            } else {
+                if ($id != "all") {
+                    $stmt->bind_param('i', $id);
+                }
+                $stmt->execute();
+                if ($mysqli->errno) {
+                    echo "DB-ERROR:" . $mysqli->error . " ERRNR:" . $mysqli->errno;
+                }
+            }
+            $stmt->close();
+        }
+        $mysqli->close();
+        return $ret;
+    }
+
+    public static function editThis($id, $name, $surname, $tel, $email, $city, $zip, $street, $nr, $land)
+    {
+        $ret = 0;
+        return $ret;
+    }
+
+    /**
+     * @param $id of the contacts name that is asked
+     * @return int|string -1 if an error occurred
+     *                     the contacts name if everything goes right
+     */
+    public static function getContactName($id)
+    {
+        $ret = -1;
+        $mysqli = @new mysqli("localhost", "root", "masterkey", "matura09_db");
+        if (mysqli_connect_errno()) {
+            echo "<strong>DB connection error: </strong>" . mysqli_connect_error()
+                . " <br><strong>errornr: </strong>" . mysqli_connect_errno();
+        } else {
+            $mysqli->begin_transaction(MYSQLI_TRANS_START_READ_ONLY);
+            $mysqli->autocommit(false);
+            $sql = "SELECT c.name, c.surname
+            FROM contacts c
+            WHERE c.id = ?";
+            $stmt = $mysqli->prepare($sql);
+            if (!$stmt) {
+                echo "<strong>DB error: </strong>" . $mysqli->error . " <br><strong> errornr: </strong>" . $mysqli->errno;
+            } else {
+                $stmt->bind_param("i", $id);
+                $stmt->execute();
+                $stmt->store_result();
+                $ret = $stmt->num_rows();
+                $stmt->bind_result($name, $surname);
+                //print out the contacts and edit links
+                while ($stmt->fetch()) {
+                   $ret = " ".$name." ".$surname." ";
+                }
+                $stmt->close();
+            }
+            $mysqli->commit();
+        }
+        $mysqli->close();
+        return $ret;
+    }
 }

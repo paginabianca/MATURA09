@@ -101,9 +101,6 @@ class user
                 $stmt->bind_param('s', $uname);
                 $stmt->execute();
                 $stmt->store_result();
-               // $stmt->bind_result($dbuname);
-                //$stmt->fetch();
-                //echo $dbuname;
                 if ($stmt->num_rows > 0) {
                     $exists = $stmt->num_rows;
                 }
@@ -131,11 +128,9 @@ class user
             } else {
                 $ret = -2;
             }
-
         }
         $stmt->close();
         $mysqli->close();
-        echo "</br>return: " . $ret . "</br>";
         return $ret;
 
         return $ret;

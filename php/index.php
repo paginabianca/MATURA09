@@ -11,18 +11,20 @@ require_once("class.user.php");
 $case = 1;
 if (!user::checkLogin() and !isset($_GET["page"])) {
     $case = 1;
-}
-if ($_GET["page"] == "log") {
-    $user = $_POST['user'];
-    $password = $_POST['password'];
-    $auth = user::authUser($user, $password);
+}else{
+    if ($_GET["page"] == "log") {
+        $user = $_POST['user'];
+        $password = $_POST['password'];
+        $auth = user::authUser($user, $password);
 
-    //correct login
-    if ($auth == 0) {
-        $_SESSION['username'] = $user;
+        //correct login
+        if ($auth == 0) {
+            $_SESSION['username'] = $user;
+        }
+        $case = $auth;
     }
-    $case = $auth;
 }
+
 ?>
 <html>
 <head>

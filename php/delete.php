@@ -1,9 +1,12 @@
 <?php
- session_start();
- require_once ("class.user.php");
- if(!user::checkLogin()){
-     header("Location:index.php");
- }
+session_start();
+require_once("class.user.php");
+require_once("class.dbaccess.php");
+if (!user::checkLogin()) {
+    header("Location:index.php");
+}
+error_reporting(0);
+$id = $_GET["id"];
 /**
  * Created by PhpStorm.
  * User: Andreas Botzner
@@ -58,19 +61,44 @@
 </style>
 <body>
 <nav class="col-1">
-    <h2> MATURA09</h2>
+    <h2><a href="secure.php" style="text-decoration: none;color: black">MATURA09</a></h2>
     <p style="font-size: 80%">Contact management system</p>
     Logged in as: <strong><?php echo $_SESSION["username"]; ?></strong>
     <hr>
     <p><a href="adduser.php">Add contact</a></p>
-    <p><a href="delete.php">Delete all</a></p>
+    <p><a href="delete.php?id=all">Delete all</a></p>
     <p><a href="logout.php">Logout</a></p>
 </nav>
 <div class="col-2">
     <header>
-        <h3>Edit</h3>
+        <h3>Delete</h3>
     </header>
     <main class="content">
+        <?php
+        if (!isset($_GET["page"])) {
+
+            ?>
+            <p>
+
+            <form>
+                Do you really want to delete this contact: <strong> <?php echo dbaccess::getContactName($_GET["id"]); ?> </strong>
+                <input type="button" value="yes"
+                       onclick="window.location.href='delete.php?id=<?php echo $id ?>&page=yes'"/>
+                <input type="button" value="no" onclick="window.location.href='secure.php'">
+            </form>
+            </p>
+
+            <?php
+        } else {
+            if ($_GET["page"] == "yes") {
+                $deleted = dbaccess::deleteThis($id);
+            }
+            if ($deleted == 0) {
+                echo "Deleted <strong>" . $id . "</strong> successfully. Back to the <a href='secure.php'>contacts.</a>";
+            }
+        }
+        ?>
+
     </main>
 </div>
 </body>
