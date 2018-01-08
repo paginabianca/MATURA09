@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7eadadaf-a69f-484b-844b-17248c6bccca" name="Default" comment="">
+      <change beforePath="" afterPath="$PROJECT_DIR$/php/log.php" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/php/adduser.php" afterPath="$PROJECT_DIR$/php/adduser.php" />
       <change beforePath="$PROJECT_DIR$/php/class.dbaccess.php" afterPath="$PROJECT_DIR$/php/class.dbaccess.php" />
+      <change beforePath="$PROJECT_DIR$/php/delete.php" afterPath="$PROJECT_DIR$/php/delete.php" />
       <change beforePath="$PROJECT_DIR$/php/edit.php" afterPath="$PROJECT_DIR$/php/edit.php" />
       <change beforePath="$PROJECT_DIR$/php/secure.php" afterPath="$PROJECT_DIR$/php/secure.php" />
     </list>
@@ -15,51 +18,132 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="class.dbaccess.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/php/class.dbaccess.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="281" column="43" lean-forward="false" selection-start-line="281" selection-start-column="43" selection-end-line="281" selection-end-column="43" />
-              <folding>
-                <element signature="e#110#161#0#PHP" expanded="false" />
-                <element signature="n#getContacts#0;n#dbaccess#0;n#!!top" expanded="false" />
-                <element signature="e#2121#2405#0#PHP" expanded="false" />
-                <element signature="n#addContact#0;n#dbaccess#0;n#!!top" expanded="false" />
-                <element signature="e#4306#4409#0#PHP" expanded="false" />
-                <element signature="n#deleteThis#0;n#dbaccess#0;n#!!top" expanded="false" />
-                <element signature="e#5528#5883#0#PHP" expanded="false" />
-                <element signature="n#editThis#0;n#dbaccess#0;n#!!top" expanded="false" />
-                <element signature="e#9721#9905#0#PHP" expanded="false" />
-                <element signature="n#getContactName#0;n#dbaccess#0;n#!!top" expanded="false" />
-                <element signature="n#getContact#0;n#dbaccess#0;n#!!top" expanded="false" />
-                <marker date="1515375720892" expanded="true" signature="658:840" ph="SELECT c.id contacts" />
-                <marker date="1515375720892" expanded="true" signature="1451:1955" ph="..." />
-                <marker date="1515375720892" expanded="true" signature="2990:3051" ph="INSERT INTO adr... " />
-                <marker date="1515375720892" expanded="true" signature="3661:3728" ph="INSERT INTO contacts... " />
-                <marker date="1515375720892" expanded="true" signature="4884:4915" ph="DELETE FROM contacts... " />
-                <marker date="1515375720892" expanded="true" signature="6403:6439" ph="SELECT id FR... contacts" />
-                <marker date="1515375720892" expanded="true" signature="7190:7255" ph="UPDATE contacts... " />
-                <marker date="1515375720892" expanded="true" signature="7894:7940" ph="SELECT adr F... contacts" />
-                <marker date="1515375720892" expanded="true" signature="8842:8905" ph="UPDATE adr... " />
-                <marker date="1515375720892" expanded="true" signature="10404:10483" ph="SELECT c.nam... contacts" />
-                <marker date="1515375720892" expanded="true" signature="11789:11956" ph="SELECT c.id contacts" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="secure.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/php/secure.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="459">
-              <caret line="75" column="34" lean-forward="false" selection-start-line="75" selection-start-column="34" selection-end-line="75" selection-end-column="34" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.5">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file leaf-file-name="adduser.php" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/php/adduser.php">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="2618">
+                  <caret line="156" column="40" lean-forward="false" selection-start-line="156" selection-start-column="40" selection-end-line="156" selection-end-column="40" />
+                  <folding>
+                    <element signature="e#2266#2338#0#PHP" expanded="false" />
+                    <marker date="1515379644987" expanded="true" signature="3555:3567" ph="..." />
+                    <marker date="1515379644987" expanded="true" signature="4502:4590" ph="..." />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="edit.php" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/php/edit.php">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="255">
+                  <caret line="152" column="89" lean-forward="true" selection-start-line="152" selection-start-column="4" selection-end-line="152" selection-end-column="89" />
+                  <folding>
+                    <element signature="e#675#892#0#PHP" expanded="false" />
+                    <element signature="e#812#892#0#PHP" expanded="false" />
+                    <element signature="e#909#1142#0#PHP" expanded="false" />
+                    <element signature="e#1056#1142#0#PHP" expanded="false" />
+                    <element signature="e#1159#1377#0#PHP" expanded="false" />
+                    <element signature="e#1299#1377#0#PHP" expanded="false" />
+                    <element signature="e#1394#1613#0#PHP" expanded="false" />
+                    <element signature="e#1531#1613#0#PHP" expanded="false" />
+                    <element signature="e#1630#1844#0#PHP" expanded="false" />
+                    <element signature="e#1764#1844#0#PHP" expanded="false" />
+                    <element signature="e#1861#2070#0#PHP" expanded="false" />
+                    <element signature="e#1992#2070#0#PHP" expanded="false" />
+                    <element signature="e#2227#2311#0#PHP" expanded="false" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="class.dbaccess.php" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/php/class.dbaccess.php">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="612">
+                  <caret line="195" column="14" lean-forward="false" selection-start-line="195" selection-start-column="14" selection-end-line="195" selection-end-column="14" />
+                  <folding>
+                    <element signature="e#110#161#0#PHP" expanded="false" />
+                    <element signature="n#getContacts#0;n#dbaccess#0;n#!!top" expanded="false" />
+                    <element signature="e#2774#3058#0#PHP" expanded="false" />
+                    <element signature="n#addContact#0;n#dbaccess#0;n#!!top" expanded="false" />
+                    <element signature="e#5063#5166#0#PHP" expanded="false" />
+                    <element signature="n#deleteThis#0;n#dbaccess#0;n#!!top" expanded="false" />
+                    <element signature="e#6389#6744#0#PHP" expanded="false" />
+                    <element signature="e#10694#10878#0#PHP" expanded="false" />
+                    <element signature="n#getContactName#0;n#dbaccess#0;n#!!top" expanded="false" />
+                    <element signature="n#getContact#0;n#dbaccess#0;n#!!top" expanded="false" />
+                    <element signature="e#14209#15468#0#PHP" expanded="false" />
+                    <element signature="e#14699#15322#0#PHP" expanded="false" />
+                    <marker date="1515380618610" expanded="true" signature="788:1402" ph="SELECT c.id contacts" />
+                    <marker date="1515380618610" expanded="true" signature="2103:2607" ph="..." />
+                    <marker date="1515380618610" expanded="true" signature="3643:3704" ph="INSERT INTO adr... " />
+                    <marker date="1515380618610" expanded="true" signature="4314:4381" ph="INSERT INTO contacts... " />
+                    <marker date="1515380618610" expanded="true" signature="4887:4923" ph="INSERT INTO log... " />
+                    <marker date="1515380618610" expanded="true" signature="4887:4954" ph="INSERT INTO log... " />
+                    <marker date="1515380618610" expanded="true" signature="4887:4960" ph="INSERT INTO log... " />
+                    <marker date="1515380618610" expanded="true" signature="5641:5672" ph="DELETE FROM contacts... " />
+                    <marker date="1515380618610" expanded="true" signature="6251:6327" ph="INSERT INTO log... " />
+                    <marker date="1515380618610" expanded="true" signature="7264:7300" ph="SELECT id FR... contacts" />
+                    <marker date="1515380618610" expanded="true" signature="8057:8122" ph="UPDATE contacts... " />
+                    <marker date="1515380618610" expanded="true" signature="8761:8807" ph="SELECT adr F... contacts" />
+                    <marker date="1515380618610" expanded="true" signature="9710:9773" ph="UPDATE adr... " />
+                    <marker date="1515380618610" expanded="true" signature="10517:10591" ph="INSERT INTO log... " />
+                    <marker date="1515380618610" expanded="true" signature="11377:11456" ph="SELECT c.nam... contacts" />
+                    <marker date="1515380618610" expanded="true" signature="12767:12934" ph="SELECT c.id contacts" />
+                    <marker date="1515380618610" expanded="false" signature="14547:14640" ph="SELECT l.tim... log" />
+                    <marker date="1515380618610" expanded="true" signature="15155:15255" ph="..." />
+                    <marker date="1515380618610" expanded="true" signature="15155:15256" ph="..." />
+                    <marker date="1515380618610" expanded="false" signature="15155:15523" ph="..." />
+                    <marker date="1515380618610" expanded="true" signature="15351:15424" ph="INSERT INTO log... " />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="delete.php" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/php/delete.php">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="1190">
+                  <caret line="70" column="40" lean-forward="false" selection-start-line="70" selection-start-column="40" selection-end-line="70" selection-end-column="40" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="secure.php" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/php/secure.php">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="374">
+                  <caret line="22" column="0" lean-forward="true" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+                  <folding>
+                    <marker date="1515380685936" expanded="true" signature="1725:1773" ph="..." />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="log.php" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/php/log.php">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="238">
+                  <caret line="63" column="89" lean-forward="false" selection-start-line="63" selection-start-column="89" selection-end-line="63" selection-end-column="89" />
+                  <folding>
+                    <element signature="n#style#0;n#p#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -87,13 +171,14 @@
         <option value="$PROJECT_DIR$/php/signup.php" />
         <option value="$PROJECT_DIR$/php/logout.php" />
         <option value="$PROJECT_DIR$/php/reset.php" />
-        <option value="$PROJECT_DIR$/php/index.php" />
         <option value="$PROJECT_DIR$/php/class.user.php" />
         <option value="$PROJECT_DIR$/php/adduser.php" />
         <option value="$PROJECT_DIR$/php/delete.php" />
-        <option value="$PROJECT_DIR$/php/edit.php" />
+        <option value="$PROJECT_DIR$/php/index.php" />
         <option value="$PROJECT_DIR$/php/class.dbaccess.php" />
+        <option value="$PROJECT_DIR$/php/edit.php" />
         <option value="$PROJECT_DIR$/php/secure.php" />
+        <option value="$PROJECT_DIR$/php/log.php" />
       </list>
     </option>
   </component>
@@ -195,7 +280,7 @@
       <workItem from="1514291612755" duration="2539000" />
       <workItem from="1515232733954" duration="5046000" />
       <workItem from="1515315733624" duration="26811000" />
-      <workItem from="1515361259799" duration="14511000" />
+      <workItem from="1515361259799" duration="19503000" />
     </task>
     <task id="LOCAL-00001" summary="khooo">
       <created>1512749627557</created>
@@ -239,11 +324,18 @@
       <option name="project" value="LOCAL" />
       <updated>1515368118496</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="here we go again another push and i don't even know anymore what is new">
+      <created>1515375823674</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1515375823674</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="68099000" />
+    <option name="totallyTimeSpent" value="73091000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
@@ -306,7 +398,8 @@
     <MESSAGE value="khooo1" />
     <MESSAGE value="reeeeeeee&#10;addad alotof shit&#10;a looooooot" />
     <MESSAGE value="another shiton of content. im going to sleep tomorrow in school" />
-    <option name="LAST_COMMIT_MESSAGE" value="another shiton of content. im going to sleep tomorrow in school" />
+    <MESSAGE value="here we go again another push and i don't even know anymore what is new" />
+    <option name="LAST_COMMIT_MESSAGE" value="here we go again another push and i don't even know anymore what is new" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -336,26 +429,37 @@
           <folding>
             <element signature="e#110#161#0#PHP" expanded="false" />
             <element signature="n#getContacts#0;n#dbaccess#0;n#!!top" expanded="false" />
-            <element signature="e#2121#2405#0#PHP" expanded="false" />
+            <element signature="e#2774#3058#0#PHP" expanded="false" />
             <element signature="n#addContact#0;n#dbaccess#0;n#!!top" expanded="false" />
-            <element signature="e#4306#4409#0#PHP" expanded="false" />
+            <element signature="e#5063#5166#0#PHP" expanded="false" />
             <element signature="n#deleteThis#0;n#dbaccess#0;n#!!top" expanded="false" />
-            <element signature="e#5528#5883#0#PHP" expanded="false" />
-            <element signature="n#editThis#0;n#dbaccess#0;n#!!top" expanded="false" />
-            <element signature="e#9721#9905#0#PHP" expanded="false" />
+            <element signature="e#6389#6744#0#PHP" expanded="false" />
+            <element signature="e#10694#10878#0#PHP" expanded="false" />
             <element signature="n#getContactName#0;n#dbaccess#0;n#!!top" expanded="false" />
             <element signature="n#getContact#0;n#dbaccess#0;n#!!top" expanded="false" />
-            <marker date="1515375720892" expanded="true" signature="658:840" ph="SELECT c.id contacts" />
-            <marker date="1515375720892" expanded="true" signature="1451:1955" ph="..." />
-            <marker date="1515375720892" expanded="true" signature="2990:3051" ph="INSERT INTO adr... " />
-            <marker date="1515375720892" expanded="true" signature="3661:3728" ph="INSERT INTO contacts... " />
-            <marker date="1515375720892" expanded="true" signature="4884:4915" ph="DELETE FROM contacts... " />
-            <marker date="1515375720892" expanded="true" signature="6403:6439" ph="SELECT id FR... contacts" />
-            <marker date="1515375720892" expanded="true" signature="7190:7255" ph="UPDATE contacts... " />
-            <marker date="1515375720892" expanded="true" signature="7894:7940" ph="SELECT adr F... contacts" />
-            <marker date="1515375720892" expanded="true" signature="8842:8905" ph="UPDATE adr... " />
-            <marker date="1515375720892" expanded="true" signature="10404:10483" ph="SELECT c.nam... contacts" />
-            <marker date="1515375720892" expanded="true" signature="11789:11956" ph="SELECT c.id contacts" />
+            <element signature="e#14209#15468#0#PHP" expanded="false" />
+            <element signature="e#14699#15322#0#PHP" expanded="false" />
+            <marker date="1515380618610" expanded="true" signature="788:1402" ph="SELECT c.id contacts" />
+            <marker date="1515380618610" expanded="true" signature="2103:2607" ph="..." />
+            <marker date="1515380618610" expanded="true" signature="3643:3704" ph="INSERT INTO adr... " />
+            <marker date="1515380618610" expanded="true" signature="4314:4381" ph="INSERT INTO contacts... " />
+            <marker date="1515380618610" expanded="true" signature="4887:4923" ph="INSERT INTO log... " />
+            <marker date="1515380618610" expanded="true" signature="4887:4954" ph="INSERT INTO log... " />
+            <marker date="1515380618610" expanded="true" signature="4887:4960" ph="INSERT INTO log... " />
+            <marker date="1515380618610" expanded="true" signature="5641:5672" ph="DELETE FROM contacts... " />
+            <marker date="1515380618610" expanded="true" signature="6251:6327" ph="INSERT INTO log... " />
+            <marker date="1515380618610" expanded="true" signature="7264:7300" ph="SELECT id FR... contacts" />
+            <marker date="1515380618610" expanded="true" signature="8057:8122" ph="UPDATE contacts... " />
+            <marker date="1515380618610" expanded="true" signature="8761:8807" ph="SELECT adr F... contacts" />
+            <marker date="1515380618610" expanded="true" signature="9710:9773" ph="UPDATE adr... " />
+            <marker date="1515380618610" expanded="true" signature="10517:10591" ph="INSERT INTO log... " />
+            <marker date="1515380618610" expanded="true" signature="11377:11456" ph="SELECT c.nam... contacts" />
+            <marker date="1515380618610" expanded="true" signature="12767:12934" ph="SELECT c.id contacts" />
+            <marker date="1515380618610" expanded="false" signature="14547:14640" ph="SELECT l.tim... log" />
+            <marker date="1515380618610" expanded="true" signature="15155:15255" ph="..." />
+            <marker date="1515380618610" expanded="true" signature="15155:15256" ph="..." />
+            <marker date="1515380618610" expanded="false" signature="15155:15523" ph="..." />
+            <marker date="1515380618610" expanded="true" signature="15351:15424" ph="INSERT INTO log... " />
           </folding>
         </state>
       </provider>
@@ -378,10 +482,9 @@
         <state relative-caret-position="1241">
           <caret line="73" column="26" lean-forward="false" selection-start-line="73" selection-start-column="26" selection-end-line="73" selection-end-column="26" />
           <folding>
-            <element signature="e#405#2348#0#PHP" expanded="false" />
             <element signature="e#2266#2338#0#PHP" expanded="false" />
-            <marker date="1515367539350" expanded="true" signature="3555:3567" ph="..." />
-            <marker date="1515367539350" expanded="true" signature="4461:4549" ph="..." />
+            <marker date="1515379644987" expanded="true" signature="3555:3567" ph="..." />
+            <marker date="1515379644987" expanded="true" signature="4502:4590" ph="..." />
           </folding>
         </state>
       </provider>
@@ -602,17 +705,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/php/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" column="5" lean-forward="false" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
-          <folding>
-            <element signature="e#6#97#0#PHP" expanded="true" />
-            <marker date="1515328143702" expanded="true" signature="1826:1843" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/php/class.user.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="799">
@@ -626,95 +718,118 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/php/adduser.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="663">
-          <caret line="227" column="16" lean-forward="true" selection-start-line="222" selection-start-column="12" selection-end-line="227" selection-end-column="16" />
-          <folding>
-            <element signature="e#405#2348#0#PHP" expanded="false" />
-            <element signature="e#2266#2338#0#PHP" expanded="false" />
-            <marker date="1515367539350" expanded="true" signature="3555:3567" ph="..." />
-            <marker date="1515367539350" expanded="true" signature="4461:4549" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/php/edit.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-55">
-          <caret line="22" column="8" lean-forward="false" selection-start-line="22" selection-start-column="8" selection-end-line="22" selection-end-column="8" />
-          <folding>
-            <element signature="e#655#872#0#PHP" expanded="false" />
-            <element signature="e#792#872#0#PHP" expanded="false" />
-            <element signature="e#889#1122#0#PHP" expanded="false" />
-            <element signature="e#1036#1122#0#PHP" expanded="false" />
-            <element signature="e#1139#1357#0#PHP" expanded="false" />
-            <element signature="e#1279#1357#0#PHP" expanded="false" />
-            <element signature="e#1374#1593#0#PHP" expanded="false" />
-            <element signature="e#1511#1593#0#PHP" expanded="false" />
-            <element signature="e#1610#1824#0#PHP" expanded="false" />
-            <element signature="e#1744#1824#0#PHP" expanded="false" />
-            <element signature="e#1841#2050#0#PHP" expanded="false" />
-            <element signature="e#1972#2050#0#PHP" expanded="false" />
-            <element signature="e#2207#2291#0#PHP" expanded="false" />
-            <marker date="1515375720863" expanded="true" signature="5157:5248" ph="..." />
-            <marker date="1515375720863" expanded="true" signature="5504:5593" ph="..." />
-            <marker date="1515375720863" expanded="true" signature="5763:5852" ph="..." />
-            <marker date="1515375720863" expanded="true" signature="6059:6146" ph="..." />
-            <marker date="1515375720863" expanded="true" signature="6320:6407" ph="..." />
-            <marker date="1515375720863" expanded="true" signature="6580:6670" ph="..." />
-            <marker date="1515375720863" expanded="true" signature="6879:6966" ph="..." />
-            <marker date="1515375720863" expanded="true" signature="7136:7224" ph="..." />
-            <marker date="1515375720863" expanded="true" signature="7398:7443" ph="..." />
-            <marker date="1515375720863" expanded="true" signature="7710:7834" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/php/delete.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="924">
-          <caret line="83" column="130" lean-forward="false" selection-start-line="83" selection-start-column="130" selection-end-line="83" selection-end-column="130" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/php/class.dbaccess.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="281" column="43" lean-forward="false" selection-start-line="281" selection-start-column="43" selection-end-line="281" selection-end-column="43" />
+        <state relative-caret-position="612">
+          <caret line="195" column="14" lean-forward="false" selection-start-line="195" selection-start-column="14" selection-end-line="195" selection-end-column="14" />
           <folding>
             <element signature="e#110#161#0#PHP" expanded="false" />
             <element signature="n#getContacts#0;n#dbaccess#0;n#!!top" expanded="false" />
-            <element signature="e#2121#2405#0#PHP" expanded="false" />
+            <element signature="e#2774#3058#0#PHP" expanded="false" />
             <element signature="n#addContact#0;n#dbaccess#0;n#!!top" expanded="false" />
-            <element signature="e#4306#4409#0#PHP" expanded="false" />
+            <element signature="e#5063#5166#0#PHP" expanded="false" />
             <element signature="n#deleteThis#0;n#dbaccess#0;n#!!top" expanded="false" />
-            <element signature="e#5528#5883#0#PHP" expanded="false" />
-            <element signature="n#editThis#0;n#dbaccess#0;n#!!top" expanded="false" />
-            <element signature="e#9721#9905#0#PHP" expanded="false" />
+            <element signature="e#6389#6744#0#PHP" expanded="false" />
+            <element signature="e#10694#10878#0#PHP" expanded="false" />
             <element signature="n#getContactName#0;n#dbaccess#0;n#!!top" expanded="false" />
             <element signature="n#getContact#0;n#dbaccess#0;n#!!top" expanded="false" />
-            <marker date="1515375720892" expanded="true" signature="658:840" ph="SELECT c.id contacts" />
-            <marker date="1515375720892" expanded="true" signature="1451:1955" ph="..." />
-            <marker date="1515375720892" expanded="true" signature="2990:3051" ph="INSERT INTO adr... " />
-            <marker date="1515375720892" expanded="true" signature="3661:3728" ph="INSERT INTO contacts... " />
-            <marker date="1515375720892" expanded="true" signature="4884:4915" ph="DELETE FROM contacts... " />
-            <marker date="1515375720892" expanded="true" signature="6403:6439" ph="SELECT id FR... contacts" />
-            <marker date="1515375720892" expanded="true" signature="7190:7255" ph="UPDATE contacts... " />
-            <marker date="1515375720892" expanded="true" signature="7894:7940" ph="SELECT adr F... contacts" />
-            <marker date="1515375720892" expanded="true" signature="8842:8905" ph="UPDATE adr... " />
-            <marker date="1515375720892" expanded="true" signature="10404:10483" ph="SELECT c.nam... contacts" />
-            <marker date="1515375720892" expanded="true" signature="11789:11956" ph="SELECT c.id contacts" />
+            <element signature="e#14209#15468#0#PHP" expanded="false" />
+            <element signature="e#14699#15322#0#PHP" expanded="false" />
+            <marker date="1515380618610" expanded="true" signature="788:1402" ph="SELECT c.id contacts" />
+            <marker date="1515380618610" expanded="true" signature="2103:2607" ph="..." />
+            <marker date="1515380618610" expanded="true" signature="3643:3704" ph="INSERT INTO adr... " />
+            <marker date="1515380618610" expanded="true" signature="4314:4381" ph="INSERT INTO contacts... " />
+            <marker date="1515380618610" expanded="true" signature="4887:4923" ph="INSERT INTO log... " />
+            <marker date="1515380618610" expanded="true" signature="4887:4954" ph="INSERT INTO log... " />
+            <marker date="1515380618610" expanded="true" signature="4887:4960" ph="INSERT INTO log... " />
+            <marker date="1515380618610" expanded="true" signature="5641:5672" ph="DELETE FROM contacts... " />
+            <marker date="1515380618610" expanded="true" signature="6251:6327" ph="INSERT INTO log... " />
+            <marker date="1515380618610" expanded="true" signature="7264:7300" ph="SELECT id FR... contacts" />
+            <marker date="1515380618610" expanded="true" signature="8057:8122" ph="UPDATE contacts... " />
+            <marker date="1515380618610" expanded="true" signature="8761:8807" ph="SELECT adr F... contacts" />
+            <marker date="1515380618610" expanded="true" signature="9710:9773" ph="UPDATE adr... " />
+            <marker date="1515380618610" expanded="true" signature="10517:10591" ph="INSERT INTO log... " />
+            <marker date="1515380618610" expanded="true" signature="11377:11456" ph="SELECT c.nam... contacts" />
+            <marker date="1515380618610" expanded="true" signature="12767:12934" ph="SELECT c.id contacts" />
+            <marker date="1515380618610" expanded="false" signature="14547:14640" ph="SELECT l.tim... log" />
+            <marker date="1515380618610" expanded="true" signature="15155:15255" ph="..." />
+            <marker date="1515380618610" expanded="true" signature="15155:15256" ph="..." />
+            <marker date="1515380618610" expanded="false" signature="15155:15523" ph="..." />
+            <marker date="1515380618610" expanded="true" signature="15351:15424" ph="INSERT INTO log... " />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/php/secure.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="75" column="34" lean-forward="false" selection-start-line="75" selection-start-column="34" selection-end-line="75" selection-end-column="34" />
+        <state relative-caret-position="374">
+          <caret line="22" column="0" lean-forward="true" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+          <folding>
+            <marker date="1515380685936" expanded="true" signature="1725:1773" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php/delete.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1190">
+          <caret line="70" column="40" lean-forward="false" selection-start-line="70" selection-start-column="40" selection-end-line="70" selection-end-column="40" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php/adduser.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2618">
+          <caret line="156" column="40" lean-forward="false" selection-start-line="156" selection-start-column="40" selection-end-line="156" selection-end-column="40" />
+          <folding>
+            <element signature="e#2266#2338#0#PHP" expanded="false" />
+            <marker date="1515379644987" expanded="true" signature="3555:3567" ph="..." />
+            <marker date="1515379644987" expanded="true" signature="4502:4590" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="21" column="42" lean-forward="true" selection-start-line="21" selection-start-column="42" selection-end-line="21" selection-end-column="42" />
+          <folding>
+            <element signature="e#6#97#0#PHP" expanded="true" />
+            <marker date="1515328143702" expanded="true" signature="1826:1843" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php/edit.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="152" column="89" lean-forward="true" selection-start-line="152" selection-start-column="4" selection-end-line="152" selection-end-column="89" />
+          <folding>
+            <element signature="e#675#892#0#PHP" expanded="false" />
+            <element signature="e#812#892#0#PHP" expanded="false" />
+            <element signature="e#909#1142#0#PHP" expanded="false" />
+            <element signature="e#1056#1142#0#PHP" expanded="false" />
+            <element signature="e#1159#1377#0#PHP" expanded="false" />
+            <element signature="e#1299#1377#0#PHP" expanded="false" />
+            <element signature="e#1394#1613#0#PHP" expanded="false" />
+            <element signature="e#1531#1613#0#PHP" expanded="false" />
+            <element signature="e#1630#1844#0#PHP" expanded="false" />
+            <element signature="e#1764#1844#0#PHP" expanded="false" />
+            <element signature="e#1861#2070#0#PHP" expanded="false" />
+            <element signature="e#1992#2070#0#PHP" expanded="false" />
+            <element signature="e#2227#2311#0#PHP" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/php/log.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="63" column="89" lean-forward="false" selection-start-line="63" selection-start-column="89" selection-end-line="63" selection-end-column="89" />
+          <folding>
+            <element signature="n#style#0;n#p#0;n#nav#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

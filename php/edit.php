@@ -5,6 +5,7 @@ require_once("class.dbaccess.php");
 if (!user::checkLogin()) {
     header("Location:index.php");
 }
+error_reporting(0);
 /**
  * Created by PhpStorm.
  * User: Andreas Botzner
@@ -156,6 +157,7 @@ function test_input($data)
     <p><a href="adduser.php">Add contact</a></p>
     <p><a href="delete.php?id=all">Delete all</a></p>
     <p><a href="logout.php">Logout</a></p>
+    <p><a href="log.php">Logbook</a></p>
 </nav>
 <div class="col-2">
     <header>

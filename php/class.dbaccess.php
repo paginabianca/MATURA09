@@ -11,8 +11,13 @@ class dbaccess
     /**
      * @return the index of the contact
      */
-    public static function getContacts($sort)
+    public static function getContacts($sort, $search)
     {
+        if ($search == "") {
+            $search = "%";
+        }else {
+            $search = "%".$search."%";
+        }
         $ret = 0;
         $mysqli = @new mysqli("localhost", "root", "masterkey", "matura09_db");
         if (mysqli_connect_errno()) {
@@ -23,13 +28,19 @@ class dbaccess
             $mysqli->autocommit(false);
             $sql = "SELECT c.id ,c.name, c.surname , c.tel, c.email, a.city, a.zip, a.street, a.nr, a.land
             FROM contacts c , adr a 
-            WHERE c.adr = a.id
+            WHERE (c.name LIKE ? AND  c.adr = a.id) OR 
+                  (c.surname LIKE ? AND  c.adr = a.id) OR 
+                  (c.tel LIKE ? AND  c.adr = a.id) OR 
+                  (c.email LIKE ? AND c.adr = a.id) OR 
+                  (a.city LIKE ? AND  c.adr = a.id)
+            OR (a.zip LIKE ? AND  c.adr = a.id) 
+            OR (a.street LIKE ? AND  c.adr = a.id) OR (a.nr LIKE ? AND  c.adr = a.id) OR (a.land LIKE ? AND  c.adr = a.id)             
             ORDER  BY ? ASC";
             $stmt = $mysqli->prepare($sql);
             if (!$stmt) {
                 echo "<strong>DB error: </strong>" . $mysqli->error . " <br><strong> errornr: </strong>" . $mysqli->errno;
             } else {
-                $stmt->bind_param("i", $sort);
+                $stmt->bind_param("sssssssssi", $search, $search, $search, $search, $search, $search, $search, $search, $search, $sort);
                 $stmt->execute();
                 $stmt->store_result();
                 $ret = $stmt->num_rows();
@@ -53,7 +64,7 @@ class dbaccess
             $mysqli->commit();
         }
         $mysqli->close();
-        return ret;
+        return $ret;
     }
 
     /**
@@ -105,7 +116,7 @@ class dbaccess
                     $stmt->close();
                 }
             }
-
+            $mysqli->query("INSERT INTO log(user,type) VALUES ('" . $_SESSION["username"] . "','add')");
             $mysqli->commit();
         }
         $mysqli->close();
@@ -143,6 +154,7 @@ class dbaccess
             }
             $stmt->close();
         }
+        $mysqli->query("INSERT INTO log(user,type) VALUES ('" . $_SESSION["username"] . "','delete')");
         $mysqli->close();
         return $ret;
     }
@@ -181,11 +193,11 @@ class dbaccess
                     echo "DB exec lock ERROR:" . $mysqli->error . " ERRNR:" . $mysqli->errno;
                 }
             }
-            echo "affected rows: " . $stmt->affected_rows;
-            echo "id :" . $id;
+            //echo "affected rows: " . $stmt->affected_rows;
+            //echo "id :" . $id;
             //if contact exists and is locked it gets updated
             //update contact data
-            if ($stmt->affected_rows>0) {
+            if ($stmt->affected_rows > 0) {
                 $sql = "UPDATE contacts SET name=?, surname=?, tel=?,email=? WHERE id = ?";
                 $stmt = $mysqli->prepare($sql);
                 if (!$stmt) {
@@ -213,7 +225,7 @@ class dbaccess
                         $stmt->bind_result($adr);
                         $stmt->fetch();
                     }
-                    $val =$stmt->affected_rows;
+                    $val = $stmt->affected_rows;
                     $stmt->close();
 
                     //update address
@@ -233,7 +245,7 @@ class dbaccess
                     }
                 }
             }
-
+            $mysqli->query("INSERT INTO log(user,type) VALUES ('" . $_SESSION["username"] . "','edit')");
             $mysqli->commit();
         }
         $mysqli->close();
@@ -279,7 +291,8 @@ class dbaccess
         return $ret;
     }
 
-    public static function getContact($id){
+    public static function getContact($id)
+    {
         $ret = null;
         $mysqli = @new mysqli("localhost", "root", "masterkey", "matura09_db");
         if (mysqli_connect_errno()) {
@@ -303,15 +316,15 @@ class dbaccess
                 //print out the contacts and edit links
                 while ($stmt->fetch()) {
                     $ret = array(
-                        "name"=>$name,
-                        "surname"=>$surname,
-                        "tel"=>$tel,
-                        "email"=>$email,
-                        "city"=>$city,
-                        "zip"=>$zip,
-                        "street"=>$street,
-                        "nr"=>$nr,
-                        "land"=>$land
+                        "name" => $name,
+                        "surname" => $surname,
+                        "tel" => $tel,
+                        "email" => $email,
+                        "city" => $city,
+                        "zip" => $zip,
+                        "street" => $street,
+                        "nr" => $nr,
+                        "land" => $land
                     );
                 }
                 $stmt->close();
@@ -321,5 +334,41 @@ class dbaccess
         $mysqli->close();
         return $ret;
 
+    }
+
+    public static function getLog()
+    {
+        $ret = 0;
+        $mysqli = @new mysqli("localhost", "root", "masterkey", "matura09_db");
+        if (mysqli_connect_errno()) {
+            echo "<strong>DB connection error: </strong>" . mysqli_connect_error()
+                . " <br><strong>errornr: </strong>" . mysqli_connect_errno();
+        } else {
+            $mysqli->begin_transaction(MYSQLI_TRANS_START_READ_ONLY);
+            $mysqli->autocommit(false);
+            $sql = "SELECT l.time, l.user, l.type
+            FROM log l             
+            ORDER  BY 1 ASC";
+            $stmt = $mysqli->prepare($sql);
+            if (!$stmt) {
+                echo "<strong>DB error: </strong>" . $mysqli->error . " <br><strong> errornr: </strong>" . $mysqli->errno;
+            } else {
+                $stmt->execute();
+                $stmt->store_result();
+                $ret = $stmt->num_rows();
+                $stmt->bind_result($time, $user, $type);
+                //print out the contacts and edit links
+                while ($stmt->fetch()) {
+                    echo "<tr><td>$time</td>
+                            <td>$user</td>
+                            <td>$type</td>";
+                }
+                $stmt->close();
+            }
+            $mysqli->query("INSERT INTO log(user,type) VALUES ('" . $_SESSION["username"] . "','log')");
+            $mysqli->commit();
+        }
+        $mysqli->close();
+        return $ret;
     }
 }

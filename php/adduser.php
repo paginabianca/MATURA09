@@ -154,6 +154,7 @@ function test_input($data)
     <p><a href="adduser.php">Add contact</a></p>
     <p><a href="delete.php">Delete all</a></p>
     <p><a href="logout.php">Logout</a></p>
+    <p><a href="log.php">Logbook</a></p>
 </nav>
 <div class="col-2">
     <header>
