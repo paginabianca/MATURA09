@@ -81,10 +81,10 @@ error_reporting(0);
             <thead>
             <tr>
                 <th><a href="secure.php?sort=2">Name</a></th>
-                <th> <a href="secure.php?sort=3">Surname</a></th>
-                <th> <a href="secure.php?sort=4">Phone</a></th>
+                <th><a href="secure.php?sort=3">Surname</a></th>
+                <th><a href="secure.php?sort=4">Phone</a></th>
                 <th><a href="secure.php?sort=5">Email</a></th>
-                <th> <a href="secure.php?sort=6">City</a></th>
+                <th><a href="secure.php?sort=6">City</a></th>
                 <th><a href="secure.php?sort=7">ZIP</a></th>
                 <th><a href="secure.php?sort=8">Street</a></th>
                 <th><a href="secure.php?sort=9">Nr.</a></th>
@@ -95,9 +95,9 @@ error_reporting(0);
             </thead>
             <tbody>
             <?php
-            if(!isset($_GET["sort"])){
+            if (!isset($_GET["sort"])) {
                 dbaccess::getContacts("2");
-            }else {
+            } else {
                 dbaccess::getContacts($_GET["sort"]);
             }
 

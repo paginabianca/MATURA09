@@ -14,75 +14,88 @@ if (!user::checkLogin()) {
 $nameErr = $surnamenameErr = $telErr = $emailErr = $cityErr = $zipErr = $streetErr = $nrErr = $landErr = "";
 $case = 0;
 $valid = true;
-if (!$_GET["page"]) {
-    $case = 1;
-} else {
-    if ($_GET["page"] == "add") {
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if (isset($_GET["id"])) {
+    $id = $_GET["id"];
 
-            if (empty($_POST["name"])) {
-                $nameErrErr = "Name is required";
-                $valid = false;
-            } else {
-                $name = test_input($_POST["name"]);
-            }
-            if (empty($_POST["surname"])) {
-                $surnamenameErr = "Surname is required";
-                $valid = false;
-            } else {
-                $surname = test_input($_POST["surname"]);
-            }
-            if (empty($_POST["tel"])) {
-                $telErr = "Phone number is required";
-                $valid = false;
-            } else {
-                $tel = test_input($_POST["tel"]);
-            }
-            if (empty($_POST["email"])) {
-                $emailErr = "Email is required";
-                $valid = false;
-            } else {
-                $email = test_input($_POST["email"]);
-            }
-            if (empty($_POST["city"])) {
-                $cityErr = "City is required";
-                $valid = false;
-            } else {
-                $city = test_input($_POST["city"]);
-            }
-            if (empty($_POST["zip"])) {
-                $zipErr = "ZIP is required";
-                $valid = false;
-            } else {
-                $zip = test_input($_POST["zip"]);
-            }
-            if (empty($_POST["street"])) {
-                $streetErr = "Street is required";
-                $valid = false;
-            } else {
-                $street = test_input($_POST["street"]);
-            }
-            if (empty($_POST["nr"])) {
-                $nrErr = "Nr is required";
-                $valid = false;
-            } else {
-                $nr = test_input($_POST["nr"]);
-            }
-            if (empty($_POST["land"])) {
-                $landErr = "Land is required";
-                $valid = false;
-            } else {
-                $land = test_input($_POST["land"]);
-            }
-        }
-        //if all fields are filled in correctly then we try to edit the contact
-        if ($valid) {
-            $case = dbaccess::editThis($id, $name, $surname, $tel, $email, $city, $zip, $street, $nr, $land);
-        } else {
-            $case = 1;
-        }
+    if (!isset($_GET["page"])) {
+        $case = 1;
+        $contact = dbaccess::getContact($id);
 
+    } else {
+        if ($_GET["page"] == "edit") {
+            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+                if (empty($_POST["name"])) {
+                    $nameErrErr = "Name is required";
+                    $valid = false;
+                } else {
+                    $name = test_input($_POST["name"]);
+                }
+                if (empty($_POST["surname"])) {
+                    $surnamenameErr = "Surname is required";
+                    $valid = false;
+                } else {
+                    $surname = test_input($_POST["surname"]);
+                }
+                if (empty($_POST["tel"])) {
+                    $telErr = "Phone number is required";
+                    $valid = false;
+                } else {
+                    $tel = test_input($_POST["tel"]);
+                }
+                if (empty($_POST["email"])) {
+                    $emailErr = "Email is required";
+                    $valid = false;
+                } else {
+                    $email = test_input($_POST["email"]);
+                }
+                if (empty($_POST["city"])) {
+                    $cityErr = "City is required";
+                    $valid = false;
+                } else {
+                    $city = test_input($_POST["city"]);
+                }
+                if (empty($_POST["zip"])) {
+                    $zipErr = "ZIP is required";
+                    $valid = false;
+                } else {
+                    $zip = test_input($_POST["zip"]);
+                }
+                if (empty($_POST["street"])) {
+                    $streetErr = "Street is required";
+                    $valid = false;
+                } else {
+                    $street = test_input($_POST["street"]);
+                }
+                if (empty($_POST["nr"])) {
+                    $nrErr = "Nr is required";
+                    $valid = false;
+                } else {
+                    $nr = test_input($_POST["nr"]);
+                }
+                if (empty($_POST["land"])) {
+                    $landErr = "Land is required";
+                    $valid = false;
+                } else {
+                    $land = test_input($_POST["land"]);
+                }
+            }
+            //if all fields are filled in correctly then we try to edit the contact
+            if ($valid) {
+                $case = dbaccess::editThis($id, $name, $surname, $tel, $email, $city, $zip, $street, $nr, $land);
+            } else {
+                $case = 1;
+            }
+
+        }
     }
+}
+function test_input($data)
+{
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
 }
 
 ?>
@@ -129,6 +142,7 @@ if (!$_GET["page"]) {
     header, article, nav {
         padding: 1em;
     }
+
     .error {
         color: #F44336;
     }
@@ -148,58 +162,80 @@ if (!$_GET["page"]) {
         <h3>Edit</h3>
     </header>
     <main class="content">
-        <form method="post" action="adduser.php?page=add">
-            <table>
-                <tr>
-                    <td></td>
-                    <td><span class="error" style="font-size: 80%"> *required fields</span></td>
-                </tr>
-                <tr>
-                    <td>Name:</td>
-                    <td><input type="text" name="name"><span class="error">* <?php echo $nameErr; ?></span></td>
-                </tr>
-                <tr>
-                    <td>Surname:</td>
-                    <td><input type="text" name="surname"><span
-                                class="error">* <?php echo $surnamenameErr; ?></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Phone:</td>
-                    <td><input type="tel" name="tel"><span class="error">* <?php echo $telErr; ?></span></td>
-                </tr>
-                <tr>
-                    <td>Email:</td>
-                    <td><input type="email" name="email"><span class="error">* <?php echo $emailErr; ?></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>City</td>
-                    <td><input type="text" name="city"><span class="error">* <?php echo $cityErr; ?></span></td>
-                </tr>
-                <tr>
-                    <td>ZIP:</td>
-                    <td><input type="number" name="zip"><span class="error">* <?php echo $zipErr; ?></span></td>
-                </tr>
-                <tr>
-                    <td>Street:</td>
-                    <td><input type="text" name="street"><span class="error">* <?php echo $streetErr; ?></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Nr.:</td>
-                    <td><input type="number" name="nr"><span class="error">* <?php echo $nrErr; ?></span></td>
-                </tr>
-                <tr>
-                    <td>Land:</td>
-                    <td><input type="text" name="land"><span class="error">* <?php echo $landErr; ?></span></td>
-                </tr>
-                <tr>
-                    <td><input type="reset" name="Reset"></td>
-                    <td><input type="submit" name="Add"></td>
-                </tr>
-            </table>
-        </form>
+        <?php
+        switch ($case) {
+            case 1:
+                ?>
+                <form method="post" action="edit.php?page=edit&id=<?php echo $id; ?>">
+                    <table>
+                        <tr>
+                            <td></td>
+                            <td><span class="error" style="font-size: 80%"> *required fields</span></td>
+                        </tr>
+                        <tr>
+                            <td>Name:</td>
+                            <td><input type="text" name="name" value="<?php echo $contact['name'];?>"><span
+                                        class="error">* <?php echo $nameErr; ?></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Surname:</td>
+                            <td><input type="text" name="surname" value="<?php echo $contact['surname'];?>"><span
+                                        class="error">* <?php echo $surnamenameErr; ?></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Phone:</td>
+                            <td><input type="tel" name="tel" value="<?php echo $contact['tel'];?>"><span class="error">* <?php echo $telErr; ?></span></td>
+                        </tr>
+                        <tr>
+                            <td>Email:</td>
+                            <td><input type="email" name="email" value="<?php echo $contact['email'];?>"><span class="error">* <?php echo $emailErr; ?></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>City</td>
+                            <td><input type="text" name="city" value="<?php echo $contact['city'];?>"><span class="error">* <?php echo $cityErr; ?></span></td>
+                        </tr>
+                        <tr>
+                            <td>ZIP:</td>
+                            <td><input type="number" name="zip" value="<?php echo $contact['zip'];?>"><span class="error">* <?php echo $zipErr; ?></span></td>
+                        </tr>
+                        <tr>
+                            <td>Street:</td>
+                            <td><input type="text" name="street" value="<?php echo $contact['street'];?>"><span class="error">* <?php echo $streetErr; ?></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Nr.:</td>
+                            <td><input type="number" name="nr" value="<?php echo $contact['nr'];?>"><span class="error">* <?php echo $nrErr; ?></span></td>
+                        </tr>
+                        <tr>
+                            <td>Land:</td>
+                            <td><input type="text" name="land" value="<?php echo $contact['land'];?>"><span class="error">* <?php echo $landErr; ?></span></td>
+                        </tr>
+                        <tr>
+                            <td><input type="reset" name="Reset"></td>
+                            <td><input type="submit" name="Add"></td>
+                        </tr>
+                    </table>
+                </form>
+                <?php
+                break;
+            case 0:
+                ?> <p>
+                Contact was edited successfully with the
+                name:<strong><?php echo dbaccess::getContactName($_GET["id"]); ?></strong>
+                <br>
+                <br>
+                Edit <a href="edit.php?id=<?php echo $_GET['id'] ?>"> again</a> or return to <a href="secure.php">
+                    contacts list</a>.
+            </p>
+                <?php
+                break;
+        }
+        ?>
+
     </main>
 </div>
 </body>

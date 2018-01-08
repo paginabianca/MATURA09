@@ -147,9 +147,96 @@ class dbaccess
         return $ret;
     }
 
+    /**
+     * @param $id all other @params are the new values for the contact this id
+     * @param $name
+     * @param $surname
+     * @param $tel
+     * @param $email
+     * @param $city
+     * @param $zip
+     * @param $street
+     * @param $nr
+     * @param $land
+     * @return int 0 if everything worked. Otherwise a error msg will be displayed
+     */
     public static function editThis($id, $name, $surname, $tel, $email, $city, $zip, $street, $nr, $land)
     {
         $ret = 0;
+        $mysqli = @new mysqli("localhost", "root", "masterkey", "matura09_db");
+        if (mysqli_connect_errno()) {
+            echo "<strong>DB connection error: </strong>" . mysqli_connect_error() . " <br><strong>errornr: </strong>" . mysqli_connect_errno();
+        } else {
+            $mysqli->autocommit(false);
+            $mysqli->query("START TRANSACTION");
+            $sql = "SELECT id FROM contacts WHERE id = ?";
+            $stmt = $mysqli->prepare($sql);
+            if (!$stmt) {
+                echo "<strong>DB lock error:</strong> " . $mysqli->error . " <br><strong>nr.:</strong> " . $mysqli->errno;
+            } else {
+                $stmt->bind_param("i", $id);
+                $stmt->execute();
+                $stmt->store_result();
+                if ($mysqli->errno) {
+                    echo "DB exec lock ERROR:" . $mysqli->error . " ERRNR:" . $mysqli->errno;
+                }
+            }
+            echo "affected rows: " . $stmt->affected_rows;
+            echo "id :" . $id;
+            //if contact exists and is locked it gets updated
+            //update contact data
+            if ($stmt->affected_rows>0) {
+                $sql = "UPDATE contacts SET name=?, surname=?, tel=?,email=? WHERE id = ?";
+                $stmt = $mysqli->prepare($sql);
+                if (!$stmt) {
+                    echo "<strong>DB contact error:</strong> " . $mysqli->error . " <br><strong>nr.:</strong> " . $mysqli->errno;
+                } else {
+                    $stmt->bind_param("ssisi", $name, $surname, $tel, $email, $id);
+                    $stmt->execute();
+                    if ($mysqli->errno) {
+                        echo "DB exec contact ERROR:" . $mysqli->error . " ERRNR:" . $mysqli->errno;
+                    }
+                    $stmt->close();
+                    //get the adr id of the contact
+                    $sql = "SELECT adr FROM contacts WHERE contacts.id = ?";
+                    $stmt = $mysqli->prepare($sql);
+                    $adr = null;
+                    if (!$stmt) {
+                        echo "<strong>DB get adr error:</strong> " . $mysqli->error . " <br><strong>nr.:</strong> " . $mysqli->errno;
+                    } else {
+                        $stmt->bind_param("i", $id);
+                        $stmt->execute();
+                        if ($mysqli->errno) {
+                            echo "DB exec get adr ERROR:" . $mysqli->error . " ERRNR:" . $mysqli->errno;
+                        }
+                        $stmt->store_result();
+                        $stmt->bind_result($adr);
+                        $stmt->fetch();
+                    }
+                    $val =$stmt->affected_rows;
+                    $stmt->close();
+
+                    //update address
+                    if ($val) {
+                        $sql = "UPDATE adr SET city=?, zip=?, street=?,nr=?,land=? WHERE id = ?";
+                        $stmt = $mysqli->prepare($sql);
+                        if (!$stmt) {
+                            echo "<strong>DB contact error:</strong> " . $mysqli->error . " <br><strong>nr.:</strong> " . $mysqli->errno;
+                        } else {
+                            $stmt->bind_param("sisisi", $city, $zip, $street, $nr, $land, $adr);
+                            $stmt->execute();
+                            if ($mysqli->errno) {
+                                echo "DB exec adr ERROR:" . $mysqli->error . " ERRNR:" . $mysqli->errno;
+                            }
+                        }
+                        $stmt->close();
+                    }
+                }
+            }
+
+            $mysqli->commit();
+        }
+        $mysqli->close();
         return $ret;
     }
 
@@ -182,7 +269,7 @@ class dbaccess
                 $stmt->bind_result($name, $surname);
                 //print out the contacts and edit links
                 while ($stmt->fetch()) {
-                   $ret = " ".$name." ".$surname." ";
+                    $ret = " " . $name . " " . $surname . " ";
                 }
                 $stmt->close();
             }
@@ -190,5 +277,49 @@ class dbaccess
         }
         $mysqli->close();
         return $ret;
+    }
+
+    public static function getContact($id){
+        $ret = null;
+        $mysqli = @new mysqli("localhost", "root", "masterkey", "matura09_db");
+        if (mysqli_connect_errno()) {
+            echo "<strong>DB connection error: </strong>" . mysqli_connect_error()
+                . " <br><strong>errornr: </strong>" . mysqli_connect_errno();
+        } else {
+            $mysqli->autocommit(false);
+            $mysqli->query("START TRANSACTION");
+            $mysqli->query("SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ");
+            $sql = "SELECT c.id ,c.name, c.surname , c.tel, c.email, a.city, a.zip, a.street, a.nr, a.land
+            FROM contacts c , adr a 
+            WHERE c.adr = a.id AND c.id = ?";
+            $stmt = $mysqli->prepare($sql);
+            if (!$stmt) {
+                echo "<strong>DB error: </strong>" . $mysqli->error . " <br><strong> errornr: </strong>" . $mysqli->errno;
+            } else {
+                $stmt->bind_param("i", $id);
+                $stmt->execute();
+                $stmt->store_result();
+                $stmt->bind_result($id, $name, $surname, $tel, $email, $city, $zip, $street, $nr, $land);
+                //print out the contacts and edit links
+                while ($stmt->fetch()) {
+                    $ret = array(
+                        "name"=>$name,
+                        "surname"=>$surname,
+                        "tel"=>$tel,
+                        "email"=>$email,
+                        "city"=>$city,
+                        "zip"=>$zip,
+                        "street"=>$street,
+                        "nr"=>$nr,
+                        "land"=>$land
+                    );
+                }
+                $stmt->close();
+            }
+            $mysqli->commit();
+        }
+        $mysqli->close();
+        return $ret;
+
     }
 }
