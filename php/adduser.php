@@ -222,7 +222,7 @@ function test_input($data)
             default:
                 ?>
             <p>
-                Contact was added successfully with the id:<strong><?php echo $case;?></strong>
+                Contact was added successfully with the ID:<strong><?php echo $case;?></strong>
                 <br>
                 <br>
                 Add <a href="adduser.php"> another</a> or return to <a href="secure.php"> contacts list</a>.

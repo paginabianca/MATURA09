@@ -99,7 +99,7 @@ $id = $_GET["id"];
                     echo "<p>Deleted <strong>" . $id . "</strong> successfully. Back to the <a href='secure.php'>contacts.</a></p>";
                     break;
                 case 1:
-                    echo "<p>Error <strong>" . $id . "</strong> can't delete contact with id: <strong>" . $id . "</strong> 
+                    echo "<p>Error <strong>" . $id . "</strong> can't delete contact with ID: <strong>" . $id . "</strong> 
                     because it does not exist. Back to the <a href='secure.php'>contact list.</a></p>";
             }
         }

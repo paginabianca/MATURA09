@@ -139,9 +139,9 @@ class dbaccess
             $mysqli->autocommit(false);
             $mysqli->query("START TRANSACTION");
             if ($id == "all") {
-                $sql = "SELECT * FROM contacts FOR UPDATE ";
+                $sql = "SELECT id FROM contacts FOR UPDATE ";
             } else {
-                $sql = "SELECT FROM contacts WHERE id=?";
+                $sql = "SELECT id FROM contacts WHERE id = ? FOR UPDATE ";
             }
             $stmt = $mysqli->prepare($sql);
             if (!$stmt) {
@@ -158,19 +158,20 @@ class dbaccess
                     $stmt->close();
                     $mysqli->rollback();
                 } else {
-                    if ($stmt->affected_rows = 0) {
+                    if ($stmt->affected_rows == 0) {
                         $ret = -1;
                         $stmt->close();
                         $mysqli->rollback();
                     } else {
                         if ($id == "all") {
-                            $sql = "DELETE * FROM contacts ";
+                            $sql1 = "DELETE FROM contacts ";
                         } else {
-                            $sql = "DELETE FROM contacts WHERE id=?";
+                            $sql1 = "DELETE FROM contacts WHERE id = ?";
                         }
-                        $stmt = $mysqli->prepare($sql);
+                        $stmt = $mysqli->prepare($sql1);
                         if (!$stmt) {
                             echo "<strong>DB error while creating delete statement:</strong> " . $mysqli->error . " <br><strong>nr.:</strong> " . $mysqli->errno;
+                            echo "<br>". var_dump($stmt);
                             $stmt->close();
                             $mysqli->rollback();
                         } else {
