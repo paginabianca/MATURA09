@@ -15,8 +15,8 @@ class dbaccess
     {
         if ($search == "") {
             $search = "%";
-        }else {
-            $search = "%".$search."%";
+        } else {
+            $search = "%" . $search . "%";
         }
         $ret = 0;
         $mysqli = @new mysqli("localhost", "root", "masterkey", "matura09_db");
@@ -125,7 +125,8 @@ class dbaccess
 
     /**
      * @param $id id of the contact to delete or all
-     * @return int 0 if deletet
+     * @return int  0 if deletet
+     *              -1 if the contact doesn't exist
      *
      */
     public static function deleteThis($id)
@@ -135,26 +136,62 @@ class dbaccess
         if (mysqli_connect_errno()) {
             echo "<strong>DB connection error: </strong>" . mysqli_connect_error() . " <br><strong>errornr: </strong>" . mysqli_connect_errno();
         } else {
+            $mysqli->autocommit(false);
+            $mysqli->query("START TRANSACTION");
             if ($id == "all") {
-                $sql = "DELETE * FROM contacts ";
+                $sql = "SELECT * FROM contacts FOR UPDATE ";
             } else {
-                $sql = "DELETE FROM contacts WHERE id=?";
+                $sql = "SELECT FROM contacts WHERE id=?";
             }
             $stmt = $mysqli->prepare($sql);
             if (!$stmt) {
-                echo "<strong>DB error:</strong> " . $mysqli->error . " <br><strong>nr.:</strong> " . $mysqli->errno;
+                echo "<strong>DB error while creating delete lock statement:</strong> " . $mysqli->error . " <br><strong>nr.:</strong> " . $mysqli->errno;
+                $stmt->close();
+                $mysqli->rollback();
             } else {
                 if ($id != "all") {
-                    $stmt->bind_param('i', $id);
+                    $stmt->bind_param("i", $id);
                 }
                 $stmt->execute();
                 if ($mysqli->errno) {
-                    echo "DB-ERROR:" . $mysqli->error . " ERRNR:" . $mysqli->errno;
+                    echo "DB error while locking the contact that was about to be deleted:" . $mysqli->error . " ERRNR:" . $mysqli->errno;
+                    $stmt->close();
+                    $mysqli->rollback();
+                } else {
+                    if ($stmt->affected_rows = 0) {
+                        $ret = -1;
+                        $stmt->close();
+                        $mysqli->rollback();
+                    } else {
+                        if ($id == "all") {
+                            $sql = "DELETE * FROM contacts ";
+                        } else {
+                            $sql = "DELETE FROM contacts WHERE id=?";
+                        }
+                        $stmt = $mysqli->prepare($sql);
+                        if (!$stmt) {
+                            echo "<strong>DB error while creating delete statement:</strong> " . $mysqli->error . " <br><strong>nr.:</strong> " . $mysqli->errno;
+                            $stmt->close();
+                            $mysqli->rollback();
+                        } else {
+                            if ($id != "all") {
+                                $stmt->bind_param('i', $id);
+                            }
+                            $stmt->execute();
+                            if ($mysqli->errno) {
+                                echo "DB-ERROR:" . $mysqli->error . " ERRNR:" . $mysqli->errno;
+                                $stmt->close();
+                                $mysqli->rollback();
+                            } else {
+                                $stmt->close();
+                                $mysqli->query("INSERT INTO log(user,type) VALUES ('" . $_SESSION["username"] . "','delete')");
+                                $mysqli->commit();
+                            }
+                        }
+                    }
                 }
             }
-            $stmt->close();
         }
-        $mysqli->query("INSERT INTO log(user,type) VALUES ('" . $_SESSION["username"] . "','delete')");
         $mysqli->close();
         return $ret;
     }
@@ -180,73 +217,99 @@ class dbaccess
             echo "<strong>DB connection error: </strong>" . mysqli_connect_error() . " <br><strong>errornr: </strong>" . mysqli_connect_errno();
         } else {
             $mysqli->autocommit(false);
+            //setting the isolation level to READ COMMITTED
+            $mysqli->query("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED");
+            //starting transaction
             $mysqli->query("START TRANSACTION");
-            $sql = "SELECT id FROM contacts WHERE id = ?";
+            //lock the contact that is about to be edited
+            $sql = "SELECT id FROM contacts WHERE id = ? FOR UPDATE ";
             $stmt = $mysqli->prepare($sql);
             if (!$stmt) {
-                echo "<strong>DB lock error:</strong> " . $mysqli->error . " <br><strong>nr.:</strong> " . $mysqli->errno;
+                echo "<strong>DB ERROR while creating the statement to lock a contact: </strong> " . $mysqli->error . " <br><strong>nr.:</strong> " . $mysqli->errno;
+                $stmt->close();
+                $mysqli->rollback();
             } else {
                 $stmt->bind_param("i", $id);
                 $stmt->execute();
                 $stmt->store_result();
                 if ($mysqli->errno) {
-                    echo "DB exec lock ERROR:" . $mysqli->error . " ERRNR:" . $mysqli->errno;
-                }
-            }
-            //echo "affected rows: " . $stmt->affected_rows;
-            //echo "id :" . $id;
-            //if contact exists and is locked it gets updated
-            //update contact data
-            if ($stmt->affected_rows > 0) {
-                $sql = "UPDATE contacts SET name=?, surname=?, tel=?,email=? WHERE id = ?";
-                $stmt = $mysqli->prepare($sql);
-                if (!$stmt) {
-                    echo "<strong>DB contact error:</strong> " . $mysqli->error . " <br><strong>nr.:</strong> " . $mysqli->errno;
+                    echo "DB ERROR while trying to lock contact id: <strong>" . $id . "</strong> :" . $mysqli->error . " ERRNR:" . $mysqli->errno;
+                    $stmt->close();
+                    $mysqli->rollback();
                 } else {
-                    $stmt->bind_param("ssisi", $name, $surname, $tel, $email, $id);
-                    $stmt->execute();
-                    if ($mysqli->errno) {
-                        echo "DB exec contact ERROR:" . $mysqli->error . " ERRNR:" . $mysqli->errno;
-                    }
-                    $stmt->close();
-                    //get the adr id of the contact
-                    $sql = "SELECT adr FROM contacts WHERE contacts.id = ?";
-                    $stmt = $mysqli->prepare($sql);
-                    $adr = null;
-                    if (!$stmt) {
-                        echo "<strong>DB get adr error:</strong> " . $mysqli->error . " <br><strong>nr.:</strong> " . $mysqli->errno;
-                    } else {
-                        $stmt->bind_param("i", $id);
-                        $stmt->execute();
-                        if ($mysqli->errno) {
-                            echo "DB exec get adr ERROR:" . $mysqli->error . " ERRNR:" . $mysqli->errno;
-                        }
-                        $stmt->store_result();
-                        $stmt->bind_result($adr);
-                        $stmt->fetch();
-                    }
-                    $val = $stmt->affected_rows;
-                    $stmt->close();
-
-                    //update address
-                    if ($val) {
-                        $sql = "UPDATE adr SET city=?, zip=?, street=?,nr=?,land=? WHERE id = ?";
+                    if ($stmt->affected_rows > 0) {
+                        $stmt->close();
+                        $sql = "UPDATE contacts SET name=?, surname=?, tel=?,email=? WHERE id = ?";
                         $stmt = $mysqli->prepare($sql);
                         if (!$stmt) {
-                            echo "<strong>DB contact error:</strong> " . $mysqli->error . " <br><strong>nr.:</strong> " . $mysqli->errno;
+                            echo "<strong>DB ERROR while cerating the statement to update a contact: </strong> " . $mysqli->error . " <br><strong>nr.:</strong> " . $mysqli->errno;
+                            $stmt->close();
+                            $mysqli->rollback();
                         } else {
-                            $stmt->bind_param("sisisi", $city, $zip, $street, $nr, $land, $adr);
+                            $stmt->bind_param("ssisi", $name, $surname, $tel, $email, $id);
                             $stmt->execute();
                             if ($mysqli->errno) {
-                                echo "DB exec adr ERROR:" . $mysqli->error . " ERRNR:" . $mysqli->errno;
+                                echo "DB ERROR while updating the contact: " . $mysqli->error . " ERRNR:" . $mysqli->errno;
+                                $stmt->close();
+                                $mysqli->rollback();
+                            } else {
+                                //locking the address
+                                $stmt->close();
+                                //get the adr id of the contact
+                                $sql = "SELECT adr FROM contacts WHERE contacts.id = ? FOR UPDATE ";
+                                $stmt = $mysqli->prepare($sql);
+                                $adr = null;
+                                if (!$stmt) {
+                                    echo "<strong>DB get adr error:</strong> " . $mysqli->error . " <br><strong>nr.:</strong> " . $mysqli->errno;
+                                    $stmt->close();
+                                    $mysqli->rollback();
+                                } else {
+                                    $stmt->bind_param("i", $id);
+                                    $stmt->execute();
+                                    if ($mysqli->errno) {
+                                        echo "DB ERROR while locking the address: " . $mysqli->error . " ERRNR:" . $mysqli->errno;
+                                        $stmt->close();
+                                        $mysqli->rollback();
+                                    } else {
+                                        $stmt->store_result();
+                                        $stmt->bind_result($adr);
+                                        $stmt->fetch();
+                                        $val = $stmt->affected_rows;
+                                        $stmt->close();
+                                    }
+                                }
+                                //update address
+                                if ($val) {
+                                    $sql = "UPDATE adr SET city=?, zip=?, street=?,nr=?,land=? WHERE id = ?";
+                                    $stmt = $mysqli->prepare($sql);
+                                    if (!$stmt) {
+                                        echo "<strong>DB ERROR while creating a statement to update the address:</strong> " . $mysqli->error . " <br><strong>nr.:</strong> " . $mysqli->errno;
+                                        $stmt->close();
+                                        $mysqli->rollback();
+                                    } else {
+                                        $stmt->bind_param("sisisi", $city, $zip, $street, $nr, $land, $adr);
+                                        $stmt->execute();
+                                        if ($mysqli->errno) {
+                                            echo "<strong>DB ERRROR while updating the address:</strong>" . $mysqli->error . " <br><strong>nr.:</strong>" . $mysqli->errno;
+                                            $stmt->close();
+                                            $mysqli->rollback();
+                                        } else {
+                                            $stmt->close();
+                                            //if EVERYTHING went well a log is created and the actions get committed to the database
+                                            $mysqli->query("INSERT INTO log(user,type) VALUES ('" . $_SESSION["username"] . "','edit')");
+                                            $mysqli->commit();
+                                        }
+                                    }
+
+                                }
                             }
                         }
+                    } else {
                         $stmt->close();
+                        $mysqli->rollback();
                     }
                 }
             }
-            $mysqli->query("INSERT INTO log(user,type) VALUES ('" . $_SESSION["username"] . "','edit')");
-            $mysqli->commit();
         }
         $mysqli->close();
         return $ret;
@@ -255,7 +318,7 @@ class dbaccess
     /**
      * @param $id of the contacts name that is asked
      * @return int|string -1 if an error occurred
-     *                     the contacts name if everything goes right
+     *                     name of the contact in form "name surname"
      */
     public static function getContactName($id)
     {
@@ -281,7 +344,7 @@ class dbaccess
                 $stmt->bind_result($name, $surname);
                 //print out the contacts and edit links
                 while ($stmt->fetch()) {
-                    $ret = " " . $name . " " . $surname . " ";
+                    $ret = $name . " " . $surname . " ";
                 }
                 $stmt->close();
             }
@@ -291,6 +354,13 @@ class dbaccess
         return $ret;
     }
 
+    /**
+     * @param $id
+     * @return array|int    -1 if a error happens while creating the statement
+     *                      -2 if a error happens while executing the statement
+     *                      0  if contact with the given id does not exit
+     *                      array with the contacts metadata
+     */
     public static function getContact($id)
     {
         $ret = null;
@@ -298,6 +368,7 @@ class dbaccess
         if (mysqli_connect_errno()) {
             echo "<strong>DB connection error: </strong>" . mysqli_connect_error()
                 . " <br><strong>errornr: </strong>" . mysqli_connect_errno();
+            $ret = -1;
         } else {
             $mysqli->autocommit(false);
             $mysqli->query("START TRANSACTION");
@@ -308,32 +379,37 @@ class dbaccess
             $stmt = $mysqli->prepare($sql);
             if (!$stmt) {
                 echo "<strong>DB error: </strong>" . $mysqli->error . " <br><strong> errornr: </strong>" . $mysqli->errno;
+                $ret = -2;
             } else {
                 $stmt->bind_param("i", $id);
                 $stmt->execute();
                 $stmt->store_result();
-                $stmt->bind_result($id, $name, $surname, $tel, $email, $city, $zip, $street, $nr, $land);
-                //print out the contacts and edit links
-                while ($stmt->fetch()) {
-                    $ret = array(
-                        "name" => $name,
-                        "surname" => $surname,
-                        "tel" => $tel,
-                        "email" => $email,
-                        "city" => $city,
-                        "zip" => $zip,
-                        "street" => $street,
-                        "nr" => $nr,
-                        "land" => $land
-                    );
+                if ($stmt->affected_rows > 0) {
+                    $stmt->bind_result($id, $name, $surname, $tel, $email, $city, $zip, $street, $nr, $land);
+                    //print out the contacts and edit links
+                    while ($stmt->fetch()) {
+                        $ret = array(
+                            "name" => $name,
+                            "surname" => $surname,
+                            "tel" => $tel,
+                            "email" => $email,
+                            "city" => $city,
+                            "zip" => $zip,
+                            "street" => $street,
+                            "nr" => $nr,
+                            "land" => $land
+                        );
+                    }
+                } else {
+                    $ret = $stmt->affected_rows;
                 }
+
                 $stmt->close();
             }
             $mysqli->commit();
         }
         $mysqli->close();
         return $ret;
-
     }
 
     public static function getLog()

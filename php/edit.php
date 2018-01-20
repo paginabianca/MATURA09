@@ -21,6 +21,9 @@ if (isset($_GET["id"])) {
     if (!isset($_GET["page"])) {
         $case = 1;
         $contact = dbaccess::getContact($id);
+        if ($contact == 0) {
+            $case = 2;
+        }
 
     } else {
         if ($_GET["page"] == "edit") {
@@ -166,6 +169,18 @@ function test_input($data)
     <main class="content">
         <?php
         switch ($case) {
+            case 0:
+                ?>
+                <p>
+                    Contact was edited successfully with the
+                    name:<strong><?php echo dbaccess::getContactName($_GET["id"]); ?></strong>
+                    <br>
+                    <br>
+                    Edit <a href="edit.php?id=<?php echo $_GET['id'] ?>"> again</a> or return to the <a href="secure.php">
+                        contact list</a>.
+                </p>
+                <?php
+                break;
             case 1:
                 ?>
                 <form method="post" action="edit.php?page=edit&id=<?php echo $id; ?>">
@@ -176,45 +191,52 @@ function test_input($data)
                         </tr>
                         <tr>
                             <td>Name:</td>
-                            <td><input type="text" name="name" value="<?php echo $contact['name'];?>"><span
+                            <td><input type="text" name="name" value="<?php echo $contact['name']; ?>"><span
                                         class="error">* <?php echo $nameErr; ?></span>
                             </td>
                         </tr>
                         <tr>
                             <td>Surname:</td>
-                            <td><input type="text" name="surname" value="<?php echo $contact['surname'];?>"><span
+                            <td><input type="text" name="surname" value="<?php echo $contact['surname']; ?>"><span
                                         class="error">* <?php echo $surnamenameErr; ?></span>
                             </td>
                         </tr>
                         <tr>
                             <td>Phone:</td>
-                            <td><input type="tel" name="tel" value="<?php echo $contact['tel'];?>"><span class="error">* <?php echo $telErr; ?></span></td>
+                            <td><input type="tel" name="tel" value="<?php echo $contact['tel']; ?>"><span class="error">* <?php echo $telErr; ?></span>
+                            </td>
                         </tr>
                         <tr>
                             <td>Email:</td>
-                            <td><input type="email" name="email" value="<?php echo $contact['email'];?>"><span class="error">* <?php echo $emailErr; ?></span>
+                            <td><input type="email" name="email" value="<?php echo $contact['email']; ?>"><span
+                                        class="error">* <?php echo $emailErr; ?></span>
                             </td>
                         </tr>
                         <tr>
                             <td>City</td>
-                            <td><input type="text" name="city" value="<?php echo $contact['city'];?>"><span class="error">* <?php echo $cityErr; ?></span></td>
+                            <td><input type="text" name="city" value="<?php echo $contact['city']; ?>"><span
+                                        class="error">* <?php echo $cityErr; ?></span></td>
                         </tr>
                         <tr>
                             <td>ZIP:</td>
-                            <td><input type="number" name="zip" value="<?php echo $contact['zip'];?>"><span class="error">* <?php echo $zipErr; ?></span></td>
+                            <td><input type="number" name="zip" value="<?php echo $contact['zip']; ?>"><span
+                                        class="error">* <?php echo $zipErr; ?></span></td>
                         </tr>
                         <tr>
                             <td>Street:</td>
-                            <td><input type="text" name="street" value="<?php echo $contact['street'];?>"><span class="error">* <?php echo $streetErr; ?></span>
+                            <td><input type="text" name="street" value="<?php echo $contact['street']; ?>"><span
+                                        class="error">* <?php echo $streetErr; ?></span>
                             </td>
                         </tr>
                         <tr>
                             <td>Nr.:</td>
-                            <td><input type="number" name="nr" value="<?php echo $contact['nr'];?>"><span class="error">* <?php echo $nrErr; ?></span></td>
+                            <td><input type="number" name="nr" value="<?php echo $contact['nr']; ?>"><span
+                                        class="error">* <?php echo $nrErr; ?></span></td>
                         </tr>
                         <tr>
                             <td>Land:</td>
-                            <td><input type="text" name="land" value="<?php echo $contact['land'];?>"><span class="error">* <?php echo $landErr; ?></span></td>
+                            <td><input type="text" name="land" value="<?php echo $contact['land']; ?>"><span
+                                        class="error">* <?php echo $landErr; ?></span></td>
                         </tr>
                         <tr>
                             <td><input type="reset" name="Reset"></td>
@@ -224,17 +246,15 @@ function test_input($data)
                 </form>
                 <?php
                 break;
-            case 0:
-                ?> <p>
-                Contact was edited successfully with the
-                name:<strong><?php echo dbaccess::getContactName($_GET["id"]); ?></strong>
-                <br>
-                <br>
-                Edit <a href="edit.php?id=<?php echo $_GET['id'] ?>"> again</a> or return to <a href="secure.php">
-                    contacts list</a>.
-            </p>
+            case 2:
+                ?>
+                <p>
+                    Contact does no longer exist. Would you like to create a <a href="adduser.php">new one</a>
+                    or return to the <a href="secure.php">contact list</a>
+                </p>
                 <?php
                 break;
+
         }
         ?>
 

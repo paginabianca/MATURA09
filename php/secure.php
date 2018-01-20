@@ -10,7 +10,7 @@ if (isset($_GET["page"]) && $_GET["page"] == "search" && isset($_POST["search"])
 }
 //check if searching for keywords
 if (!isset($_GET["search"])) {
-    $search = "%";
+    $search = "";
 } else {
     $search = $_GET["search"];
 }

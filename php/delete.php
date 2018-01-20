@@ -80,9 +80,9 @@ $id = $_GET["id"];
 
             ?>
             <p>
-
             <form>
-                Do you really want to delete this contact: <strong> <?php echo dbaccess::getContactName($_GET["id"]); ?> </strong>
+                Do you really want to delete this contact:
+                <strong> <?php echo dbaccess::getContactName($_GET["id"]); ?> </strong>
                 <input type="button" value="yes"
                        onclick="window.location.href='delete.php?id=<?php echo $id ?>&page=yes'"/>
                 <input type="button" value="no" onclick="window.location.href='secure.php'">
@@ -94,8 +94,13 @@ $id = $_GET["id"];
             if ($_GET["page"] == "yes") {
                 $deleted = dbaccess::deleteThis($id);
             }
-            if ($deleted == 0) {
-                echo "Deleted <strong>" . $id . "</strong> successfully. Back to the <a href='secure.php'>contacts.</a>";
+            switch ($deleted) {
+                case 0:
+                    echo "<p>Deleted <strong>" . $id . "</strong> successfully. Back to the <a href='secure.php'>contacts.</a></p>";
+                    break;
+                case 1:
+                    echo "<p>Error <strong>" . $id . "</strong> can't delete contact with id: <strong>" . $id . "</strong> 
+                    because it does not exist. Back to the <a href='secure.php'>contact list.</a></p>";
             }
         }
         ?>
