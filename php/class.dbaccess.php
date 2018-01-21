@@ -164,17 +164,19 @@ class dbaccess
                         $mysqli->rollback();
                     } else {
                         if ($id == "all") {
-                            $sql1 = "DELETE FROM contacts ";
+                            $sql = "DELETE FROM contacts ";
                         } else {
-                            $sql1 = "DELETE FROM contacts WHERE id = ?";
+                            $sql = "DELETE FROM contacts WHERE id = ?";
                         }
-                        $stmt = $mysqli->prepare($sql1);
+                        $stmt->close();
+                        $stmt = $mysqli->prepare($sql);
                         if (!$stmt) {
                             echo "<strong>DB error while creating delete statement:</strong> " . $mysqli->error . " <br><strong>nr.:</strong> " . $mysqli->errno;
                             echo "<br>". var_dump($stmt);
                             $stmt->close();
                             $mysqli->rollback();
                         } else {
+                            $stmt->bind_param("i",$id);
                             if ($id != "all") {
                                 $stmt->bind_param('i', $id);
                             }
